@@ -33,8 +33,9 @@ public class HttpConnection extends AsyncTask<String, Void, String>{
     @Override
     protected String doInBackground(String... path) {
 
-        String content;
+        String content="fuck you";
         try{
+                if(checkInternetConnection())
                 content = getContent(activity.getString(R.string.url_rate));
         }
         catch (IOException ex){
@@ -48,18 +49,10 @@ public class HttpConnection extends AsyncTask<String, Void, String>{
     }
     @Override
     protected void onPostExecute(String content) {
-        if(checkInternetConnection()){
         contentText=content;
         contentView.setText(content);
         Toast.makeText(activity, "Данные загружены", Toast.LENGTH_SHORT)
-                .show();}
-        else{
-            content="FUCK YOU";
-            contentText=content;
-            contentView.setText(content);
-            Toast.makeText(activity, "Данные загружены", Toast.LENGTH_SHORT)
-                    .show();
-        }
+                .show();
     }
 
     private String getContent(String path) throws IOException {
@@ -67,10 +60,7 @@ public class HttpConnection extends AsyncTask<String, Void, String>{
         try {
             URL url=new URL(path);
             HttpURLConnection c=(HttpURLConnection)url.openConnection();
-           // c.setRequestMethod("GET");
-          //  c.setReadTimeout(10000);
             c.connect();
-
             reader= new BufferedReader(new InputStreamReader(c.getInputStream(),"windows-1251"));
             StringBuilder buf=new StringBuilder();
             String line=null;
@@ -86,7 +76,6 @@ public class HttpConnection extends AsyncTask<String, Void, String>{
         }
     }
     protected boolean checkInternetConnection() {
-
         ConnectivityManager cm = (ConnectivityManager)activity.
                 getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo netInfo = cm.getActiveNetworkInfo();
