@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Convector_valute</string>
+    <string name="url_rate">http://www.cbr.ru/scripts/XML_daily.asp</string>
 </resources>
