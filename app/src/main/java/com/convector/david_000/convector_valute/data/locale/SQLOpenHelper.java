@@ -29,27 +29,15 @@ public class SQLOpenHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(ADD_ITEM);
-
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        db.execSQL("DROP TABLE IF EXISTS "+SaveDataValute.TABLE_NAME+"");
+        db.execSQL("DROP TABLE IF EXISTS Valute");
         onCreate(db);
     }
     public Cursor getData(int id){
-//        SQLiteDatabase db1 = this.getReadableDatabase();
-//        for(int i=1;i<10;i++) {
-//            ContentValues contentValues = new ContentValues();
-//            contentValues.put(SaveDataValute.VALUTE_ID, i);
-//            contentValues.put(SaveDataValute.NUM_CODE_VALUTE, 321);
-//            contentValues.put(SaveDataValute.CHAR_CODE_VALUTE, "RUS");
-//            contentValues.put(SaveDataValute.NOMINAL_VALUTE, 100);
-//            contentValues.put(SaveDataValute.NAME_VALUTE, "Фунт стерлингов Соединенного королевства");
-//            contentValues.put(SaveDataValute.VALUE_VALUTE, "85,8376");
-//            db1.insert(SaveDataValute.TABLE_NAME, null, contentValues);
-//        }
-//        db1.close();
+
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor=db.rawQuery( "select * from Valute", null );
         // Cursor cursor= db.query(true, SaveDataValute.TABLE_NAME,

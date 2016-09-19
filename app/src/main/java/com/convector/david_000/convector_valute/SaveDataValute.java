@@ -4,7 +4,7 @@ package com.convector.david_000.convector_valute;
  * Created by gavno on 18.09.16.
  */
 public class SaveDataValute {
-    public static final int VERSION_DB = 1;
+    public static  int VERSION_DB = 1;
     public static final String NAME_DB = "valute.db";
     //table field
     public static final String TABLE_NAME = "Valute";

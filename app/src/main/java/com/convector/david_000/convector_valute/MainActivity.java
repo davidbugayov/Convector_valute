@@ -6,6 +6,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.TextView;
 
+import com.convector.david_000.convector_valute.data.locale.SQLDataSource;
+import com.convector.david_000.convector_valute.data.locale.SQLDataUtils;
 import com.convector.david_000.convector_valute.data.locale.SQLOpenHelper;
 import com.convector.david_000.convector_valute.url_connection.HttpConnection;
 
@@ -17,16 +19,23 @@ public TextView testText;
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         testText=(TextView)(findViewById(R.id.test_text));
-
-        SQLOpenHelper sqlOpenHelper= new SQLOpenHelper(this);
-        Cursor cursor= sqlOpenHelper.getData(1);
-        String nam = cursor.getString(cursor.getColumnIndex(SaveDataValute.NUM_CODE_VALUTE));
-        String phon = cursor.getString(cursor.getColumnIndex(SaveDataValute.CHAR_CODE_VALUTE));
-        String emai = cursor.getString(cursor.getColumnIndex(SaveDataValute.NOMINAL_VALUTE));
-        String stree = cursor.getString(cursor.getColumnIndex(SaveDataValute.NAME_VALUTE));
-        String plac = cursor.getString(cursor.getColumnIndex(SaveDataValute.VALUE_VALUTE));
-        testText.setText(nam +" "+ phon+ emai+stree+plac);
-       // new HttpConnection(this,contextView,testText).execute();
+//
+//        SQLOpenHelper sqlOpenHelper= new SQLOpenHelper(this);
+//        SQLDataUtils sqlDataSource= new SQLDataUtils(this);
+//        sqlDataSource.putData();
+//        Cursor cursor= sqlDataSource.getData(1);
+//        do{
+//        String nam = cursor.getString(cursor.getColumnIndex(SaveDataValute.NUM_CODE_VALUTE));
+//        String phon = cursor.getString(cursor.getColumnIndex(SaveDataValute.CHAR_CODE_VALUTE));
+//        String emai = cursor.getString(cursor.getColumnIndex(SaveDataValute.NOMINAL_VALUTE));
+//        String stree = cursor.getString(cursor.getColumnIndex(SaveDataValute.NAME_VALUTE));
+//        String plac = cursor.getString(cursor.getColumnIndex(SaveDataValute.VALUE_VALUTE));
+//        testText.append(nam +" "+ phon+ emai+stree+plac+"\n");}
+//        while (cursor.moveToNext());
+//
+//
+      // testText.setText(cursor.getString(1));
+        new HttpConnection(this,contextView,testText).execute();
     }
 
 }

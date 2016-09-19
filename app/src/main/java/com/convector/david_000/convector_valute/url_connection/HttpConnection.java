@@ -9,6 +9,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.convector.david_000.convector_valute.R;
+import com.convector.david_000.convector_valute.data.remote.XMLData;
 
 import java.io.BufferedReader;
 import java.io.IOException;
