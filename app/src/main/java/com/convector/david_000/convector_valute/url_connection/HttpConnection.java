@@ -11,6 +11,8 @@ import android.widget.Toast;
 import com.convector.david_000.convector_valute.R;
 import com.convector.david_000.convector_valute.data.remote.XMLData;
 
+import org.xmlpull.v1.XmlPullParserException;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -52,6 +54,11 @@ public class HttpConnection extends AsyncTask<String, Void, String>{
     protected void onPostExecute(String content) {
         contentText=content;
         contentView.setText(content);
+        try {
+            new XMLData(content);
+        } catch (XmlPullParserException | IOException e) {
+            e.printStackTrace();
+        }
         Toast.makeText(activity, "Данные загружены", Toast.LENGTH_SHORT)
                 .show();
     }
