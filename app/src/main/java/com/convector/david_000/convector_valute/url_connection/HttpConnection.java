@@ -9,15 +9,19 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.convector.david_000.convector_valute.R;
-import com.convector.david_000.convector_valute.data.remote.XMLData;
+import com.convector.david_000.convector_valute.data.locale.ValuteItem;
+import com.convector.david_000.convector_valute.data.remote.XMLPullParserHandler;
 
 import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.StringReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.List;
 
 /**
  * Created by gavno on 18.09.16.
@@ -54,11 +58,12 @@ public class HttpConnection extends AsyncTask<String, Void, String>{
     protected void onPostExecute(String content) {
         contentText=content;
         contentView.setText(content);
-        try {
-            new XMLData(content);
-        } catch (XmlPullParserException | IOException e) {
-            e.printStackTrace();
-        }
+        List<ValuteItem> valuteItems = null;
+        XMLPullParserHandler parser = new XMLPullParserHandler();
+        valuteItems = parser.parse(content);
+        int a= valuteItems.size();
+        //ArrayAdapter<ValuteItem> adapter = new ArrayAdapter<V>(this,android.R.layout.simple_list_item_1, employees);
+        //listView.setAdapter(adapter);
         Toast.makeText(activity, "Данные загружены", Toast.LENGTH_SHORT)
                 .show();
     }
