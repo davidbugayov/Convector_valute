@@ -19,7 +19,7 @@ import java.util.List;
 
 public class XMLPullParserHandler {
 
-    List<ValuteItem> valuteItems;
+    private List<ValuteItem> valuteItems;
     private ValuteItem valuteItem;
 
     private String text;
@@ -57,7 +57,7 @@ public class XMLPullParserHandler {
                         break;
                     case XmlPullParser.END_TAG:
                         if (tagname.equalsIgnoreCase("Valute")) {
-// add employee object to list
+// add valute object to list
                             valuteItems.add(valuteItem);
                         } else if (tagname.equalsIgnoreCase("NumCode")) {
                             valuteItem.setNumCode(text);

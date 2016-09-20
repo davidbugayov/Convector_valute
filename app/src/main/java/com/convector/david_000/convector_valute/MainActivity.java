@@ -13,7 +13,6 @@ import com.convector.david_000.convector_valute.url_connection.HttpConnection;
 
 public class MainActivity extends AppCompatActivity {
 public TextView testText;
-    public String contextView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,7 +34,6 @@ public TextView testText;
 //
 //
       // testText.setText(cursor.getString(1));
-        new HttpConnection(this,contextView,testText).execute();
     }
 
 }

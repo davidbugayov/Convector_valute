@@ -8,6 +8,7 @@ import android.os.AsyncTask;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.convector.david_000.convector_valute.AsyncResponse;
 import com.convector.david_000.convector_valute.R;
 import com.convector.david_000.convector_valute.data.locale.ValuteItem;
 import com.convector.david_000.convector_valute.data.remote.XMLPullParserHandler;
@@ -28,22 +29,19 @@ import java.util.List;
  */
 
 public class HttpConnection extends AsyncTask<String, Void, String>{
-    Activity activity;
-    String contentText;
-    TextView contentView;
-    public HttpConnection(Activity thisIs, String string, TextView textView){
-        activity=thisIs;
-        contentText=string;
-        contentView=textView;
+    private Context mContext;
+    private AsyncResponse delegate;
+    public HttpConnection(Context context,AsyncResponse asyncResponse){
+        mContext=context;
+        delegate=asyncResponse;
     }
 
     @Override
     protected String doInBackground(String... path) {
 
-        String content="fuck you";
+        String content;
         try{
-                if(checkInternetConnection())
-                content = getContent(activity.getString(R.string.url_rate));
+            content = getContent(mContext.getString(R.string.url_rate));
         }
         catch (IOException ex){
             content = ex.getMessage();
@@ -51,20 +49,12 @@ public class HttpConnection extends AsyncTask<String, Void, String>{
 
         return content;
     }
-    @Override
-    protected void onProgressUpdate(Void... items) {
-    }
+
+
     @Override
     protected void onPostExecute(String content) {
-        contentText=content;
-        contentView.setText(content);
-        List<ValuteItem> valuteItems = null;
-        XMLPullParserHandler parser = new XMLPullParserHandler();
-        valuteItems = parser.parse(content);
-        int a= valuteItems.size();
-        //ArrayAdapter<ValuteItem> adapter = new ArrayAdapter<V>(this,android.R.layout.simple_list_item_1, employees);
-        //listView.setAdapter(adapter);
-        Toast.makeText(activity, "Данные загружены", Toast.LENGTH_SHORT)
+        delegate.processFinish(content);
+        Toast.makeText(mContext, "Данные загружены"+content, Toast.LENGTH_SHORT)
                 .show();
     }
 
@@ -88,16 +78,8 @@ public class HttpConnection extends AsyncTask<String, Void, String>{
             }
         }
     }
-    protected boolean checkInternetConnection() {
-        ConnectivityManager cm = (ConnectivityManager)activity.
-                getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo netInfo = cm.getActiveNetworkInfo();
-        if (netInfo != null && netInfo.isConnectedOrConnecting()) {
-            return true;
-        } else {
-            return false;
-        }
-    }
+
+
 
 }
 

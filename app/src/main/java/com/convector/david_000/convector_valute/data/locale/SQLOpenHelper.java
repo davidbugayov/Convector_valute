@@ -12,6 +12,7 @@ import com.convector.david_000.convector_valute.SaveDataValute;
  * Created by gavno on 18.09.16.
  */
 public class SQLOpenHelper extends SQLiteOpenHelper {
+
     private static final String ADD_ITEM= ""
             + "CREATE TABLE " + SaveDataValute.TABLE_NAME + "("
             + SaveDataValute.VALUTE_ID + " INTEGER NOT NULL PRIMARY KEY,"
@@ -36,12 +37,5 @@ public class SQLOpenHelper extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS Valute");
         onCreate(db);
     }
-    public Cursor getData(int id){
 
-        SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor=db.rawQuery( "select * from Valute", null );
-        // Cursor cursor= db.query(true, SaveDataValute.TABLE_NAME,
-        //         new String[]{SaveDataValute.VALUTE_ID}, "1", null, null, null, null, null);
-        return cursor;
-    }
 }
