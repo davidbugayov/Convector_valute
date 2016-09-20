@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">Convector_valute</string>
     <string name="url_rate">http://www.cbr.ru/scripts/XML_daily.asp</string>
+    <string name="empty_data">Данные отсутвуют и нет подключения к интернету</string>
 </resources>

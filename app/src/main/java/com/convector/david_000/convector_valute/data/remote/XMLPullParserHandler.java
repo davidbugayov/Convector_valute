@@ -1,12 +1,11 @@
 package com.convector.david_000.convector_valute.data.remote;
 
-import com.convector.david_000.convector_valute.data.locale.ValuteItem;
+import com.convector.david_000.convector_valute.data.local.ValuteItem;
 
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 import org.xmlpull.v1.XmlPullParserFactory;
 
-import java.io.InputStream;
 import java.io.IOException;
 import java.io.StringReader;
 import java.util.ArrayList;

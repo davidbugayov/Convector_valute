@@ -1,4 +1,4 @@
-package com.convector.david_000.convector_valute.data.locale;
+package com.convector.david_000.convector_valute.data.local;
 
 /**
  * Created by gavno on 20.09.16.

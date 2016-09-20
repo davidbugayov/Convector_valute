@@ -2,13 +2,13 @@ package com.convector.david_000.convector_valute;
 
 import android.content.Context;
 import android.support.v4.content.AsyncTaskLoader;
+import android.widget.Toast;
 
-import com.convector.david_000.convector_valute.data.locale.SQLDataUtils;
-import com.convector.david_000.convector_valute.data.locale.ValuteItem;
+import com.convector.david_000.convector_valute.data.local.SQLDataUtils;
+import com.convector.david_000.convector_valute.data.local.ValuteItem;
 import com.convector.david_000.convector_valute.data.remote.XMLPullParserHandler;
 import com.convector.david_000.convector_valute.url_connection.HttpConnection;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -17,11 +17,11 @@ import java.util.List;
 public class ValuteLoader extends AsyncTaskLoader<List<ValuteItem>>  {
     private List<ValuteItem> mValutes;
     private Context mContext;
-    private SQLDataUtils dataUtils;
+
     public ValuteLoader(Context context) {
         super(context);
         mContext=context;
-        dataUtils=new SQLDataUtils(mContext);
+
     }
 
     @Override
@@ -35,17 +35,13 @@ public class ValuteLoader extends AsyncTaskLoader<List<ValuteItem>>  {
 
     @Override
     public List<ValuteItem> loadInBackground() {
-        //получаем что есть , вдруг у нас интеренет соедение плохое , пока грузиться
+        SQLDataUtils dataUtils = new SQLDataUtils(mContext);
         mValutes=dataUtils.getAllValute();
         if(Util.checkInternetConnection(mContext)){
-            new HttpConnection(mContext,new AsyncResponse(){
-                @Override
-                public void processFinish(String output){
-                    XMLPullParserHandler parser = new XMLPullParserHandler();
-                    mValutes = parser.parse(output);
-                    dataUtils.putData(mValutes);
-                }
-            }).execute();
+            HttpConnection connection=new HttpConnection(mContext);
+            XMLPullParserHandler parser = new XMLPullParserHandler();
+            mValutes = parser.parse(connection.getContent());
+            dataUtils.putData(mValutes);
         }
         return mValutes;
     }
@@ -53,10 +49,19 @@ public class ValuteLoader extends AsyncTaskLoader<List<ValuteItem>>  {
     @Override
     public void deliverResult(List<ValuteItem> data) {
         mValutes = data; // кешируем в память
+        if(mValutes.size()==0)
+        {
+            Toast.makeText(mContext, mContext.getString(R.string.empty_data), Toast.LENGTH_SHORT)
+                    .show();
+            return;
+        }else {
+            Toast.makeText(mContext, "ZBS", Toast.LENGTH_SHORT)
+                    .show();
+        }
 
-        // тут обрабатываем данные на UI треде
+            // тут обрабатываем данные на UI треде
 
-        super.deliverResult(data);
+            super.deliverResult(data);
     }
 
 }

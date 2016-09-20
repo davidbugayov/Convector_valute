@@ -1,8 +1,6 @@
-package com.convector.david_000.convector_valute.data.locale;
+package com.convector.david_000.convector_valute.data.local;
 
-import android.content.ContentValues;
 import android.content.Context;
-import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
