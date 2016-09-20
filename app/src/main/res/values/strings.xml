@@ -1,5 +1,11 @@
 <resources>
-    <string name="app_name">Convector_valute</string>
+    <string name="app_name">Конвертер валют</string>
     <string name="url_rate">http://www.cbr.ru/scripts/XML_daily.asp</string>
     <string name="empty_data">Данные отсутвуют и нет подключения к интернету</string>
+    <string name="input_valute">Выберите валюту</string>
+    <string name="convert_in">Конвертировать в</string>
+    <string name="input_sum">Введите сумму</string>
+    <string name="result">Результат</string>
+    <string name="calculate">Расчитать</string>
+    <string name="reset">Очистить</string>
 </resources>
