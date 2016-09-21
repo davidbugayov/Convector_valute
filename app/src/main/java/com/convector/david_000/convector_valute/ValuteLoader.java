@@ -2,12 +2,14 @@ package com.convector.david_000.convector_valute;
 
 import android.content.Context;
 import android.support.v4.content.AsyncTaskLoader;
+import android.widget.ArrayAdapter;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.convector.david_000.convector_valute.data.local.SQLDataUtils;
 import com.convector.david_000.convector_valute.data.local.ValuteItem;
 import com.convector.david_000.convector_valute.data.remote.XMLPullParserHandler;
-import com.convector.david_000.convector_valute.url_connection.HttpConnection;
+import com.convector.david_000.convector_valute.data.remote.HttpConnection;
 
 import java.util.List;
 
@@ -15,6 +17,7 @@ import java.util.List;
  * Created by gavno on 20.09.16.
  */
 public class ValuteLoader extends AsyncTaskLoader<List<ValuteItem>>  {
+    public ValuteView delegate;
     private List<ValuteItem> mValutes;
     private Context mContext;
 
@@ -55,6 +58,7 @@ public class ValuteLoader extends AsyncTaskLoader<List<ValuteItem>>  {
                     .show();
             return;
         }else {
+                delegate.deliverResult(data);
             Toast.makeText(mContext, "ZBS", Toast.LENGTH_SHORT)
                     .show();
         }

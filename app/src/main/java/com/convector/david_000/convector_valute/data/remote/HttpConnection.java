@@ -1,4 +1,4 @@
-package com.convector.david_000.convector_valute.url_connection;
+package com.convector.david_000.convector_valute.data.remote;
 
 import android.content.Context;
 
