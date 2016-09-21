@@ -11,7 +11,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 /**
- * Created by gavno on 18.09.16.
+ * Created by davidbugayov on 18.09.16.
  */
 
 public class HttpConnection {
@@ -36,7 +36,8 @@ public class HttpConnection {
             URL url=new URL(path);
             HttpURLConnection c=(HttpURLConnection)url.openConnection();
             c.connect();
-            reader= new BufferedReader(new InputStreamReader(c.getInputStream(),"windows-1251"));
+            reader= new BufferedReader(new InputStreamReader(c.getInputStream(),
+                    mContext.getString(R.string.windows_charset)));
             StringBuilder buf=new StringBuilder();
             String line=null;
             while ((line=reader.readLine()) != null) {

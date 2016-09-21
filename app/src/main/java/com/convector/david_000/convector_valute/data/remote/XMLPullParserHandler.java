@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by gavno on 19.09.16.
+ * Created by davidbugayov on 19.09.16.
  */
 
 
@@ -23,14 +23,15 @@ public class XMLPullParserHandler {
 
     private String text;
 
-    public XMLPullParserHandler() {
+    public XMLPullParserHandler(String data) {
         valuteItems = new ArrayList<ValuteItem>();
+        parse(data);
     }
     public List<ValuteItem> getValuteItems() {
         return valuteItems;
     }
 
-    public List<ValuteItem> parse(String stringXML) {
+    private void parse(String stringXML) {
         XmlPullParserFactory factory = null;
         XmlPullParser parser = null;
         try {
@@ -88,6 +89,5 @@ public class XMLPullParserHandler {
         } catch (XmlPullParserException | IOException e) {
             e.printStackTrace();
         }
-        return valuteItems;
     }
 }

@@ -4,25 +4,23 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-import com.convector.david_000.convector_valute.SaveDataValute;
-
 /**
- * Created by gavno on 18.09.16.
+ * Created by davidbugayov on 18.09.16.
  */
 public class SQLOpenHelper extends SQLiteOpenHelper {
 
     private static final String ADD_ITEM= ""
-            + "CREATE TABLE " + SaveDataValute.TABLE_NAME + "("
-            + SaveDataValute.VALUTE_ID + " INTEGER NOT NULL PRIMARY KEY,"
-            + SaveDataValute.NUM_CODE_VALUTE + " INTEGER,"
-            + SaveDataValute.CHAR_CODE_VALUTE + " TEXT,"
-            + SaveDataValute.NOMINAL_VALUTE + " INTEGER,"
-            + SaveDataValute.NAME_VALUTE + " TEXT,"
-            + SaveDataValute.VALUE_VALUTE + " TEXT"
+            + "CREATE TABLE " + DBStayField.TABLE_NAME + "("
+            + DBStayField.VALUTE_ID + " INTEGER NOT NULL PRIMARY KEY,"
+            + DBStayField.NUM_CODE_VALUTE + " INTEGER,"
+            + DBStayField.CHAR_CODE_VALUTE + " TEXT,"
+            + DBStayField.NOMINAL_VALUTE + " INTEGER,"
+            + DBStayField.NAME_VALUTE + " TEXT,"
+            + DBStayField.VALUE_VALUTE + " TEXT"
             + ")";
 
     public SQLOpenHelper(Context context) {
-        super(context, SaveDataValute.NAME_DB, null, SaveDataValute.VERSION_DB);
+        super(context, DBStayField.NAME_DB, null, DBStayField.VERSION_DB);
     }
 
     @Override
@@ -32,7 +30,7 @@ public class SQLOpenHelper extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        db.execSQL("DROP TABLE IF EXISTS Valute");
+        db.execSQL("DROP TABLE IF EXISTS "+DBStayField.TABLE_NAME);
         onCreate(db);
     }
 

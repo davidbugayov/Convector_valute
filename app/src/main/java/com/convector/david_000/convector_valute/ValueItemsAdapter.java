@@ -13,7 +13,7 @@ import com.convector.david_000.convector_valute.data.local.ValuteItem;
 import java.util.List;
 
 /**
- * Created by gavno on 21.09.16.
+ * Created by davidbugayov on 21.09.16.
  */
 public class ValueItemsAdapter  extends ArrayAdapter<ValuteItem> {
     public ValueItemsAdapter(Context context, int resource, List<ValuteItem> objects) {

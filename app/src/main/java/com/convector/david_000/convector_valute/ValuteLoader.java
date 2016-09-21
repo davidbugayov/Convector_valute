@@ -5,6 +5,7 @@ import android.support.v4.content.AsyncTaskLoader;
 import android.widget.Toast;
 
 import com.convector.david_000.convector_valute.data.local.SQLDataUtils;
+import com.convector.david_000.convector_valute.data.local.Util;
 import com.convector.david_000.convector_valute.data.local.ValuteItem;
 import com.convector.david_000.convector_valute.data.remote.XMLPullParserHandler;
 import com.convector.david_000.convector_valute.data.remote.HttpConnection;
@@ -12,7 +13,7 @@ import com.convector.david_000.convector_valute.data.remote.HttpConnection;
 import java.util.List;
 
 /**
- * Created by gavno on 20.09.16.
+ * Created by davidbugayov on 20.09.16.
  */
 public class ValuteLoader extends AsyncTaskLoader<List<ValuteItem>>  {
     public ValuteView valuteView;
@@ -22,7 +23,6 @@ public class ValuteLoader extends AsyncTaskLoader<List<ValuteItem>>  {
     public ValuteLoader(Context context) {
         super(context);
         mContext=context;
-
     }
 
     @Override
@@ -40,8 +40,8 @@ public class ValuteLoader extends AsyncTaskLoader<List<ValuteItem>>  {
         mValutes=dataUtils.getAllValute();
         if(Util.checkInternetConnection(mContext)){
             HttpConnection connection=new HttpConnection(mContext);
-            XMLPullParserHandler parser = new XMLPullParserHandler();
-            mValutes = parser.parse(connection.getContent());
+            XMLPullParserHandler parser = new XMLPullParserHandler(connection.getContent());
+            mValutes = parser.getValuteItems();
             dataUtils.putData(mValutes);
         }
         return mValutes;
@@ -56,14 +56,10 @@ public class ValuteLoader extends AsyncTaskLoader<List<ValuteItem>>  {
                     .show();
             return;
         }else {
-                valuteView.deliverResult(data);
-            Toast.makeText(mContext, "ZBS", Toast.LENGTH_SHORT)
-                    .show();
+                valuteView.deliverResult(mValutes);
         }
 
-            // тут обрабатываем данные на UI треде
-
-            super.deliverResult(data);
+            super.deliverResult(mValutes);
     }
 
 }

@@ -92,8 +92,8 @@ public class MainActivity extends AppCompatActivity implements ValuteView, TextW
 
     private  void getCalculate(){
         if(countValute ==0){
-            Toast.makeText(this, " Заполните поле", Toast.LENGTH_SHORT).show();
-        }else {
+            Toast.makeText(this, R.string.Error_empty_field, Toast.LENGTH_SHORT).show();
+        }else  if(valuteItemTo!=null|valuteItemTo!=null) {
             Double buf1=(valuteItemFrom.getValueDouble()
                     /Double.parseDouble(valuteItemFrom.getNominal()))* countValute;
             Double buf2=buf1/valuteItemTo.getValueDouble()*
@@ -124,7 +124,7 @@ public class MainActivity extends AppCompatActivity implements ValuteView, TextW
             } catch (NumberFormatException e) {
                 //Error
                 if(s.equals("")){
-                    Toast.makeText(this, "Введен некорректный символ", Toast.LENGTH_SHORT)
+                    Toast.makeText(this, R.string.Error_uncorrect_symbol, Toast.LENGTH_SHORT)
                             .show();
                     e.printStackTrace();}
             }

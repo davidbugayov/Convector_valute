@@ -1,11 +1,11 @@
-package com.convector.david_000.convector_valute;
+package com.convector.david_000.convector_valute.data.local;
 
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 
 /**
- * Created by gavno on 20.09.16.
+ * Created by davidbugayov on 20.09.16.
  */
 public class Util {
     public static boolean checkInternetConnection(Context context) {

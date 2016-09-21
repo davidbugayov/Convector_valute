@@ -1,9 +1,9 @@
-package com.convector.david_000.convector_valute;
+package com.convector.david_000.convector_valute.data.local;
 
 /**
- * Created by gavno on 18.09.16.
+ * Created by davidbugayov on 18.09.16.
  */
-public class SaveDataValute {
+public class DBStayField {
     public static  int VERSION_DB = 1;
     public static final String NAME_DB = "valute.db";
     //table field
