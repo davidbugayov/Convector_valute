@@ -16,8 +16,8 @@ import java.util.List;
  * Created by davidbugayov on 21.09.16.
  */
 public class ValueItemsAdapter  extends ArrayAdapter<ValuteItem> {
-    public ValueItemsAdapter(Context context, int resource, List<ValuteItem> objects) {
-        super(context, resource, objects);
+    public ValueItemsAdapter(Context context, int resource) {
+        super(context, resource);
     }
 
     @Override
