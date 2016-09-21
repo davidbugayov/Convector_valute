@@ -23,27 +23,25 @@ public class ValueItemsAdapter  extends ArrayAdapter<ValuteItem> {
     @Override
     public View getDropDownView(int position, View convertView, ViewGroup parent)
     {
-        ValuteItem valuteItem = getItem(position);
-
-        if (convertView == null) {
-            convertView = LayoutInflater.from(getContext())
-                    .inflate(android.R.layout.simple_spinner_dropdown_item, null);
-        }
-        ((TextView) convertView.findViewById(android.R.id.text1))
-                .setText(valuteItem.getName());
-        return convertView;
+        return  getConvertView(convertView,position);
     }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
+        return  getConvertView(convertView,position);
+    }
+
+    private View getConvertView(View conView,int position){
         ValuteItem valuteItem = getItem(position);
 
-        if (convertView == null) {
-            convertView = LayoutInflater.from(getContext())
-                    .inflate(android.R.layout.simple_spinner_item, null);
+        if (conView == null) {
+            conView = LayoutInflater.from(getContext())
+                    .inflate(android.R.layout.simple_list_item_2, null);
         }
-        ((TextView) convertView.findViewById(android.R.id.text1))
+        ((TextView) conView.findViewById(android.R.id.text1))
+                .setText(valuteItem.getCharCode());
+        ((TextView) conView.findViewById(android.R.id.text2))
                 .setText(valuteItem.getName());
-        return convertView;
+        return conView;
     }
 }

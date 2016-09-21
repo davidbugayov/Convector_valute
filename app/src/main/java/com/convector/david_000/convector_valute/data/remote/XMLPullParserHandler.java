@@ -40,6 +40,16 @@ public class XMLPullParserHandler {
             parser.setInput(new StringReader(stringXML));
             int eventType = parser.getEventType();
             int valuteID=0;
+            //добавляем РУБЛИ
+            valuteItem = new ValuteItem();
+            valuteItem.setValuteID(valuteID);
+            valuteItem.setNumCode("011");
+            valuteItem.setCharCode("RUB");
+            valuteItem.setNominal("1");
+            valuteItem.setName("Российский рубль");
+            valuteItem.setValue("1");
+            valuteItems.add(valuteItem);
+            valuteID++;
             while (eventType != XmlPullParser.END_DOCUMENT) {
                 String tagname = parser.getName();
                 switch (eventType) {

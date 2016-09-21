@@ -47,6 +47,10 @@ public class ValuteItem {
         return value;
     }
 
+    public double getValueDouble() {
+        double dblValue = Double.parseDouble(value.toString().replace(',', '.'));
+        return dblValue;
+    }
     public void setValue(String value) {
         this.value = value;
     }

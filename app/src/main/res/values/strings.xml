@@ -8,4 +8,5 @@
     <string name="result">Результат</string>
     <string name="calculate">Расчитать</string>
     <string name="reset">Очистить</string>
+    <string name="course">Курс</string>
 </resources>
