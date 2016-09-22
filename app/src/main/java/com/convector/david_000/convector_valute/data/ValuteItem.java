@@ -1,25 +1,25 @@
-package com.convector.david_000.convector_valute.data.local;
+package com.convector.david_000.convector_valute.data;
 
 /**
  * Created by davidbugayov on 20.09.16.
  */
 public class ValuteItem {
-    private  int valuteID;
+    private  Integer valuteID;
     private String numCode;
     private  String charCode;
-    private  String nominal;
+    private  Integer nominal;
     private  String name;
-    private  String value;
+    private  Double value;
 
-    public String getNominal() {
+    public Integer getNominal() {
         return nominal;
     }
 
-    public void setNominal(String nominal) {
+    public void setNominal(Integer nominal) {
         this.nominal = nominal;
     }
 
-    public int getValuteID() {
+    public Integer getValuteID() {
         return valuteID;
     }
 
@@ -43,13 +43,13 @@ public class ValuteItem {
         this.charCode = charCode;
     }
 
-    public String getValue() {
+    public Double getValue() {
         return value;
     }
 
 
     public void setValue(String value) {
-        this.value = value;
+        this.value = Double.parseDouble(value.replace(',', '.'));;
     }
 
     public String getName() {

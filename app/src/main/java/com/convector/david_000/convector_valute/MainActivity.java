@@ -1,8 +1,6 @@
 package com.convector.david_000.convector_valute;
 
 import android.os.Bundle;
-import android.support.v4.app.LoaderManager;
-import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -11,7 +9,7 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
-import com.convector.david_000.convector_valute.data.local.ValuteItem;
+import com.convector.david_000.convector_valute.data.ValuteItem;
 
 import java.util.List;
 
@@ -19,37 +17,9 @@ public class MainActivity extends AppCompatActivity implements ValuteView, View.
     private Spinner spinnerValueFrom,spinnerValueTo;
     private EditText course, contentValueTo,contentValueFrom;
     private ArrayAdapter<ValuteItem>adapter;
-    private List<ValuteItem>valuteItems;
 
-    private LoaderManager.LoaderCallbacks<List<ValuteItem>>
-            mLoaderCallbacks =
-            new LoaderManager.LoaderCallbacks<List<ValuteItem>>() {
-                @Override
-                public Loader<List<ValuteItem>> onCreateLoader(
-                        int id, Bundle args) {
-                    ValuteLoader loader=new ValuteLoader(MainActivity.this);
-                    loader.valuteView =MainActivity.this;
-                    return loader;
-                }
+    ValutePresenter presenter;
 
-                @Override
-                public void onLoadFinished(
-                        Loader<List<ValuteItem>> loader, List<ValuteItem> data) {
-                    valuteItems=data;
-                    adapter.clear();
-                    if (data != null){
-                        for (ValuteItem valuteItem : data) {
-                            adapter.insert(valuteItem, adapter.getCount());
-                        }
-                    }
-                    adapter.notifyDataSetChanged();
-                }
-
-                @Override
-                public void onLoaderReset(Loader<List<ValuteItem>> loader) {
-                    adapter.clear();
-                }
-            };
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -68,61 +38,67 @@ public class MainActivity extends AppCompatActivity implements ValuteView, View.
         contentValueTo.setEnabled(false);
         Button reset = (Button)findViewById(R.id.reset);
         Button calculate=(Button)findViewById(R.id.calculate);
-        getSupportLoaderManager().initLoader(0, null, mLoaderCallbacks);
+
+        presenter = new ValutePresenterImpl();
+        presenter.setView(this);
+
         reset.setOnClickListener(this);
         calculate.setOnClickListener(this);
     }
 
     @Override
-    public void deliverResult(final List<ValuteItem> data) {
-        valuteItems=data;
-    }
-
-
-    @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.reset:
-                getReset();
+                clickReset();
                 break;
             case R.id.calculate:
-                getCalculate();
+                clickCalculate();
                 break;
         }
     }
 
-    private void  getReset(){
+    private void clickReset(){
         course.setText("");
         contentValueFrom.setText("");
         contentValueTo.setText("");
     }
 
-    private  void getCalculate(){
+    private void clickCalculate(){
         double countValute= 0;
+
         try {
             countValute  = Double.parseDouble(contentValueFrom.getText().toString().replace(',', '.'));
         }catch (NumberFormatException e){
-           e.printStackTrace();
-        }
-        ValuteItem valuteItemFrom=valuteItems.get(spinnerValueFrom.getSelectedItemPosition());
-        ValuteItem valuteItemTo=valuteItems.get(spinnerValueTo.getSelectedItemPosition());
-        if(countValute ==0){
             Toast.makeText(this, R.string.error, Toast.LENGTH_SHORT).show();
-        }else  if(valuteItemTo != null) {
-            Double buf1=(StringToDouble(valuteItemFrom.getValue())
-                    /Double.parseDouble(valuteItemFrom.getNominal()))* countValute;
-            Double buf2=buf1/StringToDouble(valuteItemTo.getValue())*
-                    Double.parseDouble(valuteItemTo.getNominal());
-            contentValueTo.setText(String.valueOf(buf2));
-            buf1=(StringToDouble(valuteItemFrom.getValue())
-                    /Double.parseDouble(valuteItemFrom.getNominal()));
-            buf2=buf1/StringToDouble(valuteItemTo.getValue())*
-                    Double.parseDouble(valuteItemTo.getNominal());
-            course.setText(String.valueOf(buf2));
         }
-    }
-    private double StringToDouble(String data) {
-        return  Double.parseDouble(data.replace(',', '.'));
+
+        ValuteItem valuteItemFrom = adapter.getItem(spinnerValueFrom.getSelectedItemPosition());
+        ValuteItem valuteItemTo = adapter.getItem(spinnerValueTo.getSelectedItemPosition());
+
+        if(valuteItemTo != null) {
+            presenter.ConvertValute(valuteItemFrom, valuteItemTo, countValute);
+        }
     }
 
+    @Override
+    public void setResult(double result) {
+        contentValueTo.setText(String.valueOf(result));
+    }
+
+    @Override
+    public void setExchangeRate(Double rate) {
+        course.setText(String.valueOf(rate));
+    }
+
+    @Override
+    public void updateValutes(List<ValuteItem> data) {
+        adapter.clear();
+        if (data != null){
+            for (ValuteItem valuteItem : data) {
+                adapter.insert(valuteItem, adapter.getCount());
+            }
+        }
+        adapter.notifyDataSetChanged();
+    }
 }

@@ -5,6 +5,8 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
+import com.convector.david_000.convector_valute.data.ValuteItem;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -60,7 +62,7 @@ public class SQLDataUtils extends SQLOpenHelper {
                 valuteItem.setValuteID(Integer.parseInt(cursor.getString(0)));
                 valuteItem.setNumCode(cursor.getString(1));
                 valuteItem.setCharCode(cursor.getString(2));
-                valuteItem.setNominal(cursor.getString(3));
+                valuteItem.setNominal(cursor.getInt(3));
                 valuteItem.setName(cursor.getString(4));
                 valuteItem.setValue(cursor.getString(5));
                 valuteItems.add(valuteItem);

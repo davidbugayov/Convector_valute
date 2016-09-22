@@ -1,6 +1,6 @@
 package com.convector.david_000.convector_valute.data.remote;
 
-import com.convector.david_000.convector_valute.data.local.ValuteItem;
+import com.convector.david_000.convector_valute.data.ValuteItem;
 
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
@@ -46,7 +46,7 @@ public class XMLPullParserHandler {
             valuteItem.setValuteID(valuteID);
             valuteItem.setNumCode("011");
             valuteItem.setCharCode("RUB");
-            valuteItem.setNominal("1");
+            valuteItem.setNominal(1);
             valuteItem.setName("Российский рубль");
             valuteItem.setValue("1");
             valuteItems.add(valuteItem);
@@ -74,7 +74,7 @@ public class XMLPullParserHandler {
                         } else if (tagname.equalsIgnoreCase("CharCode")) {
                             valuteItem.setCharCode(text);
                         } else if (tagname.equalsIgnoreCase("Nominal")) {
-                            valuteItem.setNominal(text);
+                            valuteItem.setNominal(Integer.parseInt(text));
                         } else if (tagname.equalsIgnoreCase("Name")) {
                             valuteItem.setName(text);
                         } else if (tagname.equalsIgnoreCase("Value")) {

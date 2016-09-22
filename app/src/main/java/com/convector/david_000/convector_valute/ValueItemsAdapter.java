@@ -8,7 +8,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
-import com.convector.david_000.convector_valute.data.local.ValuteItem;
+import com.convector.david_000.convector_valute.data.ValuteItem;
 
 /**
  * Created by davidbugayov on 21.09.16.
