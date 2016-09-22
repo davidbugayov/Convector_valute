@@ -1,7 +1,6 @@
 package com.convector.david_000.convector_valute;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,8 +8,6 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import com.convector.david_000.convector_valute.data.local.ValuteItem;
-
-import java.util.List;
 
 /**
  * Created by davidbugayov on 21.09.16.

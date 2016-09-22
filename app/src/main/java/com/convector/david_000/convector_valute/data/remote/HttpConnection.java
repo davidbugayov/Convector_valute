@@ -2,19 +2,15 @@ package com.convector.david_000.convector_valute.data.remote;
 
 import android.content.Context;
 import android.os.AsyncTask;
-import android.support.v4.content.AsyncTaskLoader;
-import android.widget.Toast;
 
 import com.convector.david_000.convector_valute.AsyncResponse;
 import com.convector.david_000.convector_valute.R;
-import com.convector.david_000.convector_valute.data.local.ValuteItem;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.List;
 
 /**
  * Created by davidbugayov on 18.09.16.

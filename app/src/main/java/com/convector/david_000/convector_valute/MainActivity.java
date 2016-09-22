@@ -1,30 +1,25 @@
 package com.convector.david_000.convector_valute;
 
+import android.os.Bundle;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
-import com.convector.david_000.convector_valute.data.local.SQLDataUtils;
 import com.convector.david_000.convector_valute.data.local.ValuteItem;
 
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity implements ValuteView, TextWatcher,View.OnClickListener{
+public class MainActivity extends AppCompatActivity implements ValuteView, View.OnClickListener{
     private Spinner spinnerValueFrom,spinnerValueTo;
-    private double countValute =0;
-    private ValuteItem valuteItemFrom,valuteItemTo;
     private EditText course, contentValueTo,contentValueFrom;
     private ArrayAdapter<ValuteItem>adapter;
+    private List<ValuteItem>valuteItems;
 
     private LoaderManager.LoaderCallbacks<List<ValuteItem>>
             mLoaderCallbacks =
@@ -40,6 +35,7 @@ public class MainActivity extends AppCompatActivity implements ValuteView, TextW
                 @Override
                 public void onLoadFinished(
                         Loader<List<ValuteItem>> loader, List<ValuteItem> data) {
+                    valuteItems=data;
                     adapter.clear();
                     if (data != null){
                         for (ValuteItem valuteItem : data) {
@@ -73,37 +69,11 @@ public class MainActivity extends AppCompatActivity implements ValuteView, TextW
         getSupportLoaderManager().initLoader(0, null, mLoaderCallbacks);
         reset.setOnClickListener(this);
         calculate.setOnClickListener(this);
-        contentValueFrom.addTextChangedListener(this);
     }
 
     @Override
     public void deliverResult(final List<ValuteItem> data) {
-        adapter.clear();
-        if (data != null){
-            for (ValuteItem valuteItem : data) {
-                adapter.insert(valuteItem, adapter.getCount());
-            }
-        }
-        adapter.notifyDataSetChanged();
-        spinnerValueFrom.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                valuteItemFrom=data.get(position);
-
-            }
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-            }
-        } );
-        spinnerValueTo.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                valuteItemTo=data.get(position);
-            }
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-            }
-        } );
+        valuteItems=data;
     }
 
 
@@ -123,10 +93,12 @@ public class MainActivity extends AppCompatActivity implements ValuteView, TextW
         course.setText("");
         contentValueFrom.setText("");
         contentValueTo.setText("");
-        countValute =0;
     }
 
     private  void getCalculate(){
+        double countValute = Double.parseDouble(contentValueFrom.getText().toString().replace(',', '.'));
+        ValuteItem valuteItemFrom=valuteItems.get(spinnerValueFrom.getSelectedItemPosition());
+        ValuteItem valuteItemTo=valuteItems.get(spinnerValueTo.getSelectedItemPosition());
         if(countValute ==0){
             Toast.makeText(this, R.string.Error_empty_field, Toast.LENGTH_SHORT).show();
         }else  if(valuteItemTo!=null|valuteItemTo!=null) {
@@ -145,31 +117,5 @@ public class MainActivity extends AppCompatActivity implements ValuteView, TextW
     private double StringToDouble(String data) {
         return  Double.parseDouble(data.replace(',', '.'));
     }
-
-    //------------------------------------------------------------------------------
-    @Override
-    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-    }
-    @Override
-    public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-    }
-    @Override
-    public void afterTextChanged(Editable s) {
-        if (s != null) {
-            try {
-                countValute = Double.parseDouble(s.toString().replace(',', '.'));
-            } catch (NumberFormatException e) {
-                //Error
-                if(s.equals("")){
-                    Toast.makeText(this, R.string.Error_uncorrect_symbol, Toast.LENGTH_SHORT)
-                            .show();
-                    e.printStackTrace();}
-            }
-        }
-        //Do something with doubleValue
-    }
-
 
 }
