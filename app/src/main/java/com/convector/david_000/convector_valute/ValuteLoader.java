@@ -1,6 +1,8 @@
 package com.convector.david_000.convector_valute;
 
 import android.content.Context;
+import android.os.Handler;
+import android.os.Looper;
 import android.support.v4.content.AsyncTaskLoader;
 import android.widget.Toast;
 
@@ -23,6 +25,7 @@ public class ValuteLoader extends AsyncTaskLoader<List<ValuteItem>>  {
     public ValuteLoader(Context context) {
         super(context);
         mContext=context;
+
     }
 
     @Override
@@ -36,20 +39,33 @@ public class ValuteLoader extends AsyncTaskLoader<List<ValuteItem>>  {
 
     @Override
     public List<ValuteItem> loadInBackground() {
-        SQLDataUtils dataUtils = new SQLDataUtils(mContext);
-        mValutes=dataUtils.getAllValute();
+
+        final SQLDataUtils dataUtils = new SQLDataUtils(mContext);
+       mValutes = dataUtils.getAllValute();
         if(Util.checkInternetConnection(mContext)){
-            HttpConnection connection=new HttpConnection(mContext);
-            XMLPullParserHandler parser = new XMLPullParserHandler(connection.getContent());
-            mValutes = parser.getValuteItems();
-            dataUtils.putData(mValutes);
+            new HttpConnection(mContext,new AsyncResponse(){
+                @Override
+                public void processFinish(final String output){
+                    new Handler(Looper.getMainLooper()).post(new Runnable() {
+                        @Override
+                        public void run() {
+                            XMLPullParserHandler parser = new XMLPullParserHandler(output);
+                            mValutes = parser.getValuteItems();
+                            dataUtils.putData(mValutes);
+                            deliverResult(mValutes);
+                        }
+                    });
+                }
+            }).execute();
         }
+
         return mValutes;
     }
 
     @Override
     public void deliverResult(List<ValuteItem> data) {
         mValutes = data; // кешируем в память
+        if(mValutes!=null)
         if(mValutes.size()==0)
         {
             Toast.makeText(mContext, mContext.getString(R.string.empty_data), Toast.LENGTH_SHORT)

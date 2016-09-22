@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
-import android.widget.Adapter;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -15,9 +14,9 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.convector.david_000.convector_valute.data.local.SQLDataUtils;
 import com.convector.david_000.convector_valute.data.local.ValuteItem;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements ValuteView, TextWatcher,View.OnClickListener{
@@ -25,8 +24,7 @@ public class MainActivity extends AppCompatActivity implements ValuteView, TextW
     private double countValute =0;
     private ValuteItem valuteItemFrom,valuteItemTo;
     private EditText course, contentValueTo,contentValueFrom;
-    // Настраиваем адаптер
-    ArrayAdapter<ValuteItem>adapter;
+    private ArrayAdapter<ValuteItem>adapter;
 
     private LoaderManager.LoaderCallbacks<List<ValuteItem>>
             mLoaderCallbacks =
@@ -36,26 +34,24 @@ public class MainActivity extends AppCompatActivity implements ValuteView, TextW
                         int id, Bundle args) {
                     ValuteLoader loader=new ValuteLoader(MainActivity.this);
                     loader.valuteView =MainActivity.this;
-                    loader.onStartLoading();
                     return loader;
                 }
 
                 @Override
                 public void onLoadFinished(
                         Loader<List<ValuteItem>> loader, List<ValuteItem> data) {
-                   adapter.clear();
+                    adapter.clear();
                     if (data != null){
                         for (ValuteItem valuteItem : data) {
                             adapter.insert(valuteItem, adapter.getCount());
                         }
                     }
                     adapter.notifyDataSetChanged();
-
                 }
 
                 @Override
                 public void onLoaderReset(Loader<List<ValuteItem>> loader) {
-                   // adapter.clear();
+                    adapter.clear();
                 }
             };
     @Override
@@ -66,11 +62,9 @@ public class MainActivity extends AppCompatActivity implements ValuteView, TextW
         // Получаем экземпляр элемента Spinner
         spinnerValueFrom= (Spinner) findViewById(R.id.spinner_value_from);
         spinnerValueTo = (Spinner) findViewById(R.id.spinner_value_to);
-        adapter =
-                new ValueItemsAdapter(MainActivity.this, android.R.layout.simple_spinner_item);
+        adapter = new ValueItemsAdapter(MainActivity.this, android.R.layout.simple_spinner_item);
         spinnerValueFrom.setAdapter(adapter);
         spinnerValueTo.setAdapter(adapter);
-        spinnerValueTo.setSelection(2);
         contentValueFrom=(EditText)findViewById(R.id.content_value_from);
         course=(EditText)findViewById(R.id.course);
         contentValueTo =(EditText)findViewById(R.id.content_value_to);
@@ -84,7 +78,13 @@ public class MainActivity extends AppCompatActivity implements ValuteView, TextW
 
     @Override
     public void deliverResult(final List<ValuteItem> data) {
-
+        adapter.clear();
+        if (data != null){
+            for (ValuteItem valuteItem : data) {
+                adapter.insert(valuteItem, adapter.getCount());
+            }
+        }
+        adapter.notifyDataSetChanged();
         spinnerValueFrom.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -130,17 +130,20 @@ public class MainActivity extends AppCompatActivity implements ValuteView, TextW
         if(countValute ==0){
             Toast.makeText(this, R.string.Error_empty_field, Toast.LENGTH_SHORT).show();
         }else  if(valuteItemTo!=null|valuteItemTo!=null) {
-            Double buf1=(valuteItemFrom.getValueDouble()
+            Double buf1=(StringToDouble(valuteItemFrom.getValue())
                     /Double.parseDouble(valuteItemFrom.getNominal()))* countValute;
-            Double buf2=buf1/valuteItemTo.getValueDouble()*
+            Double buf2=buf1/StringToDouble(valuteItemTo.getValue())*
                     Double.parseDouble(valuteItemTo.getNominal());
             contentValueTo.setText(String.valueOf(buf2));
-            buf1=(valuteItemFrom.getValueDouble()
+            buf1=(StringToDouble(valuteItemFrom.getValue())
                     /Double.parseDouble(valuteItemFrom.getNominal()));
-            buf2=buf1/valuteItemTo.getValueDouble()*
+            buf2=buf1/StringToDouble(valuteItemTo.getValue())*
                     Double.parseDouble(valuteItemTo.getNominal());
             course.setText(String.valueOf(buf2));
         }
+    }
+    private double StringToDouble(String data) {
+        return  Double.parseDouble(data.replace(',', '.'));
     }
 
     //------------------------------------------------------------------------------
