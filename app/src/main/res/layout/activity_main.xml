@@ -38,12 +38,17 @@
                     android:id="@+id/content_value_from"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:backgroundTint="@color/white"
+                    android:imeOptions="flagNoExtractUi|actionDone"
+                    android:textColor="@color/white"
                     android:inputType="numberDecimal"
                     android:digits="0123456789.,"/>
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@mipmap/calc"
+                <View
+                    android:id="@+id/arrow_slider"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:background="@drawable/arrow"
+                    android:visibility="visible"
                     android:layout_centerVertical="true"
                     android:layout_alignParentRight="true"
                     android:layout_alignParentEnd="true" />
@@ -78,6 +83,8 @@
                 android:id="@+id/content_value_to"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:backgroundTint="@color/white"
+                android:textColor="@color/white"
                 android:inputType="numberDecimal"/>
             <TextView
                 android:layout_width="match_parent"
@@ -100,6 +107,8 @@
             <EditText
                 android:id="@+id/course"
                 android:layout_width="match_parent"
+                android:textColor="@color/white"
+                android:backgroundTint="@color/white"
                 android:layout_height="wrap_content"
                 android:inputType="numberDecimal"/>
         </LinearLayout>

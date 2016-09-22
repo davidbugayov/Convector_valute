@@ -9,6 +9,5 @@
     <string name="calculate">Расчитать</string>
     <string name="reset">Очистить</string>
     <string name="course">Курс</string>
-    <string name="Error_empty_field">" Заполните поле"</string>
-    <string name="Error_uncorrect_symbol">Введен некорректный символ</string>
+    <string name="error">"Ошибка"</string>
 </resources>

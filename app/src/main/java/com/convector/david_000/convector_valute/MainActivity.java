@@ -63,7 +63,9 @@ public class MainActivity extends AppCompatActivity implements ValuteView, View.
         spinnerValueTo.setAdapter(adapter);
         contentValueFrom=(EditText)findViewById(R.id.content_value_from);
         course=(EditText)findViewById(R.id.course);
+        course.setEnabled(false);
         contentValueTo =(EditText)findViewById(R.id.content_value_to);
+        contentValueTo.setEnabled(false);
         Button reset = (Button)findViewById(R.id.reset);
         Button calculate=(Button)findViewById(R.id.calculate);
         getSupportLoaderManager().initLoader(0, null, mLoaderCallbacks);
@@ -96,12 +98,17 @@ public class MainActivity extends AppCompatActivity implements ValuteView, View.
     }
 
     private  void getCalculate(){
-        double countValute = Double.parseDouble(contentValueFrom.getText().toString().replace(',', '.'));
+        double countValute= 0;
+        try {
+            countValute  = Double.parseDouble(contentValueFrom.getText().toString().replace(',', '.'));
+        }catch (NumberFormatException e){
+           e.printStackTrace();
+        }
         ValuteItem valuteItemFrom=valuteItems.get(spinnerValueFrom.getSelectedItemPosition());
         ValuteItem valuteItemTo=valuteItems.get(spinnerValueTo.getSelectedItemPosition());
         if(countValute ==0){
-            Toast.makeText(this, R.string.Error_empty_field, Toast.LENGTH_SHORT).show();
-        }else  if(valuteItemTo!=null|valuteItemTo!=null) {
+            Toast.makeText(this, R.string.error, Toast.LENGTH_SHORT).show();
+        }else  if(valuteItemTo != null) {
             Double buf1=(StringToDouble(valuteItemFrom.getValue())
                     /Double.parseDouble(valuteItemFrom.getNominal()))* countValute;
             Double buf2=buf1/StringToDouble(valuteItemTo.getValue())*
