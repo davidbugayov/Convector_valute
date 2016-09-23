@@ -18,5 +18,6 @@ public interface ValutePresenter {
     void deliverResult(List<ValuteItem> mValutes);
 
     void errorEmptyData();
+    void detachView();
 }
 

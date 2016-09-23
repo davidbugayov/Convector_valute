@@ -68,4 +68,9 @@ public class ValutePresenterImpl implements ValutePresenter {
                 .show();
     }
 
+    @Override
+    public void detachView() {
+            this.valuteView=null;
+    }
+
 }

@@ -59,7 +59,7 @@ public class SQLDataUtils extends SQLOpenHelper {
         if (cursor.moveToFirst()) {
             do {
                 valuteItem = new ValuteItem();
-                valuteItem.setValuteID(Integer.parseInt(cursor.getString(0)));
+                valuteItem.setValuteID(cursor.getInt(0));
                 valuteItem.setNumCode(cursor.getString(1));
                 valuteItem.setCharCode(cursor.getString(2));
                 valuteItem.setNominal(cursor.getInt(3));
