@@ -1,6 +1,6 @@
 package com.convector.david_000.convector_valute;
 
-import android.support.v7.app.AppCompatActivity;
+import android.app.Activity;
 
 import com.convector.david_000.convector_valute.data.ValuteItem;
 
@@ -12,7 +12,7 @@ import java.util.List;
  */
 
 public interface ValutePresenter {
-    void setView(AppCompatActivity valuteViev);
+    void setView(Activity valuteViev);
     void ConvertValute(ValuteItem fromNum, ValuteItem toNum, double countValute);
 
     void deliverResult(List<ValuteItem> mValutes);

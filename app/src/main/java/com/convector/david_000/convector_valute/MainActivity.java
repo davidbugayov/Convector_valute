@@ -1,7 +1,7 @@
 package com.convector.david_000.convector_valute;
 
+import android.app.Activity;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -13,7 +13,7 @@ import com.convector.david_000.convector_valute.data.ValuteItem;
 
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity implements ValuteView, View.OnClickListener{
+public class MainActivity extends Activity implements ValuteView, View.OnClickListener{
     private Spinner spinnerValueFrom,spinnerValueTo;
     private EditText course, contentValueTo,contentValueFrom;
     private ArrayAdapter<ValuteItem>adapter;

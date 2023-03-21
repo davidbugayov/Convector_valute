@@ -1,9 +1,9 @@
 package com.convector.david_000.convector_valute;
 
+import android.app.Activity;
+import android.app.LoaderManager;
+import android.content.Loader;
 import android.os.Bundle;
-import android.support.v4.app.LoaderManager;
-import android.support.v4.content.Loader;
-import android.support.v7.app.AppCompatActivity;
 import android.widget.Toast;
 
 import com.convector.david_000.convector_valute.data.ValuteItem;
@@ -22,7 +22,7 @@ public class ValutePresenterImpl implements ValutePresenter {
             new LoaderManager.LoaderCallbacks<List<ValuteItem>>() {
                 @Override
                 public Loader<List<ValuteItem>> onCreateLoader(int id, Bundle args) {
-                    ValuteModelLoader loader = new ValuteModelLoader((AppCompatActivity)valuteView);
+                    ValuteModelLoader loader = new ValuteModelLoader((Activity)valuteView);
                     loader.valutePresenter = ValutePresenterImpl.this;
                     return loader;
                 }
@@ -39,10 +39,10 @@ public class ValutePresenterImpl implements ValutePresenter {
             };
 
     @Override
-    public void setView(AppCompatActivity valuteViev) {
+    public void setView(Activity valuteViev) {
         this.valuteView = (ValuteView) valuteViev;
 
-        valuteViev.getSupportLoaderManager().initLoader(0, null, mLoaderCallbacks);
+        valuteViev.getLoaderManager().initLoader(0, null, mLoaderCallbacks);
     }
 
     @Override
@@ -64,7 +64,7 @@ public class ValutePresenterImpl implements ValutePresenter {
 
     @Override
     public void errorEmptyData() {
-        Toast.makeText((AppCompatActivity)valuteView, ((AppCompatActivity)valuteView).getString(R.string.empty_data), Toast.LENGTH_SHORT)
+        Toast.makeText((Activity)valuteView, ((Activity)valuteView).getString(R.string.empty_data), Toast.LENGTH_SHORT)
                 .show();
     }
 
