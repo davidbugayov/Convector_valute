@@ -1,14 +1,14 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 24
+    compileSdkVersion 33
     defaultConfig {
         applicationId "com.convector.david_000.convector_valute"
-        minSdkVersion 15
-        targetSdkVersion 24
+        minSdkVersion 21
+        targetSdkVersion 33
         versionCode 1
         versionName "1.0"
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
     }
     buildTypes {
         release {
@@ -21,16 +21,16 @@ android {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
-    implementation 'com.android.support:appcompat-v7:24.2.1'
+    implementation 'androidx.appcompat:appcompat:1.6.1'
 
     testImplementation 'junit:junit:4.13.2'
 
     androidTestImplementation 'junit:junit:4.13.2'
-    androidTestImplementation('com.android.support.test:runner:1.0.2'){
+    androidTestImplementation('androidx.test.ext:junit:1.1.5'){
         exclude group: 'com.android.support', module: 'support-annotations'
     }
 
-    androidTestImplementation('com.android.support.test.espresso:espresso-core:2.2.2', {
+    androidTestImplementation('androidx.test.espresso:espresso-core:3.1.0', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
 
