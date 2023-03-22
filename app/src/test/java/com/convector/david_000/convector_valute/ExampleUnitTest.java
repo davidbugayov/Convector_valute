@@ -1,8 +1,8 @@
 package com.convector.david_000.convector_valute;
 
-import org.junit.Test;
-
 import static org.junit.Assert.*;
+
+import org.junit.jupiter.api.Test;
 
 /**
  * To work on unit tests, switch the Test Artifact in the Build Variants view.

@@ -5,7 +5,7 @@ import android.support.test.runner.AndroidJUnit4;
 
 
 import org.junit.Rule;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 
 import static android.support.test.espresso.Espresso.onData;

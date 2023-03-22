@@ -6,9 +6,9 @@ import com.convector.david_000.convector_valute.data.ValuteItem;
 import com.convector.david_000.convector_valute.data.local.DBStayField;
 import com.convector.david_000.convector_valute.data.local.SQLDataUtils;
 
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.runner.RunWith;
 
 import java.util.ArrayList;
@@ -30,13 +30,13 @@ public class DatabaseTest {
 
     private SQLDataUtils database;
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
         getTargetContext().deleteDatabase(DBStayField.NAME_DB);
         database = new SQLDataUtils(getTargetContext());
     }
 
-    @After
+    @AfterEach
     public void tearDown() throws Exception {
         database.close();
     }
