@@ -2,10 +2,6 @@ package com.convector.david_000.convector_valute;
 
 import android.support.test.runner.AndroidJUnit4;
 
-import com.convector.david_000.convector_valute.data.ValuteItem;
-import com.convector.david_000.convector_valute.data.local.DBStayField;
-import com.convector.david_000.convector_valute.data.local.SQLDataUtils;
-
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.BeforeEach;
