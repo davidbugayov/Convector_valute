@@ -29,9 +29,14 @@ class MainViewModel @Inject constructor(
 
     fun getCurrencies() {
         viewModelScope.launch(Dispatchers.IO) {
-            _state.emit(CurrenciesState.Content(currenciesRepository.getCurrencies()))
+            //_state.emit(CurrenciesState.Content(currenciesRepository.getCurrencies()))
         }
     }
 
+    fun getSymbols() {
+        viewModelScope.launch(Dispatchers.IO) {
+            _state.emit(CurrenciesState.Symbols(currenciesRepository.getSymbols()?.symbols))
+        }
+    }
 
 }

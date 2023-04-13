@@ -40,7 +40,7 @@ class MainFragment : Fragment() {
         viewModel.state
             .onEach(::handleState)
             .launchIn(viewLifecycleOwner.lifecycleScope)
-        viewModel.getCurrencies()
+        viewModel.getSymbols()
     }
 
     private fun handleState(state: CurrenciesState) {
@@ -48,15 +48,17 @@ class MainFragment : Fragment() {
             CurrenciesState.Loading -> {
 
             }
-            is CurrenciesState.Content -> {
-                binding.recyclerCurrency.init(
-                    listOf(
-                        CurrencyItem(
-                            state.convertDto.query.from,
-                            state.convertDto.query.amount.toString()
-                        )
-                    )
-                )
+            is CurrenciesState.Symbols -> {
+                state.symbols?.let { symbols ->
+                    binding.recyclerCurrency.init(
+                        symbols.map { it ->
+                            CurrencyItem(
+                                it.key,
+                                it.value
+                            )
+                        })
+                }
+
             }
         }
     }

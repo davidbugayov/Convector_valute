@@ -1,7 +1,8 @@
 package com.convector.david_000.convector_valute.network
 
 import android.content.Context
-import com.convector.david_000.convector_valute.network.responce.ConvertDto
+import com.convector.david_000.convector_valute.data.remote.responce.ConvertDto
+import com.convector.david_000.convector_valute.data.remote.responce.SymbolsDto
 import okhttp3.Interceptor
 import retrofit2.Response
 import retrofit2.http.GET
@@ -16,6 +17,10 @@ interface CurrencyApiRetrofit {
         @Query("amount") amount: Double,
         @Query("date") date: String?,
     ): Response<ConvertDto>
+
+    @GET("exchangerates_data/symbols")
+    suspend fun symbols(): Response<SymbolsDto>
+
 
     class CurrencyApi(
         baseUrl: String,

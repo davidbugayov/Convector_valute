@@ -1,4 +1,4 @@
-package com.convector.david_000.convector_valute.network.responce
+package com.convector.david_000.convector_valute.data.remote.responce
 
 import java.util.Date
 
