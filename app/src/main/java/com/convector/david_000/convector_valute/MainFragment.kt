@@ -49,12 +49,12 @@ class MainFragment : Fragment() {
 
             }
             is CurrenciesState.Symbols -> {
-                state.symbols?.let { symbols ->
+                state.symbols.let { symbols ->
                     binding.recyclerCurrency.init(
                         symbols.map { it ->
                             CurrencyItem(
-                                it.key,
-                                it.value
+                                it.first,
+                                it.second
                             )
                         })
                 }

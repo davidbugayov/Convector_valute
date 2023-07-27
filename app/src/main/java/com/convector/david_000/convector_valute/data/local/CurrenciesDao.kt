@@ -4,6 +4,7 @@ import androidx.room.Dao
 import androidx.room.Database
 import androidx.room.Delete
 import androidx.room.Insert
+import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.RoomDatabase
 import androidx.room.Update
@@ -12,13 +13,13 @@ import androidx.room.Update
 interface CurrenciesDao {
 
     @Query("SELECT * FROM Currency")
-    suspend fun getCurrencies():SymbolsItem?
+    suspend fun getCurrencies():List<SymbolsItem>
 
-    @Insert
-    suspend fun insertCurrencies(symbols: SymbolsItem)
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertCurrencies(symbols: List<SymbolsItem>)
 
     @Update
-    suspend fun updateCurrencies(symbols: SymbolsItem)
+    suspend fun updateCurrencies(symbols: List<SymbolsItem>)
 
     @Delete
     suspend fun deleteCurrencies(symbols: SymbolsItem)

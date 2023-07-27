@@ -7,7 +7,7 @@ sealed class CurrenciesState {
     object Loading : CurrenciesState()
 
     data class Symbols(
-        val symbols: Map<String,String>?
+        val symbols: List<Pair<String,String>>
     ) : CurrenciesState()
 
 

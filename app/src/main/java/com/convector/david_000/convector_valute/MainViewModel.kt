@@ -9,7 +9,6 @@ import com.convector.david_000.convector_valute.utils.EventSharedFlow
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -35,7 +34,11 @@ class MainViewModel @Inject constructor(
 
     fun getSymbols() {
         viewModelScope.launch(Dispatchers.IO) {
-            _state.emit(CurrenciesState.Symbols(currenciesRepository.getSymbols()?.symbols))
+            val symbols = mutableListOf<Pair<String,String>>()
+            currenciesRepository.getSymbols().forEach {
+                symbols.add(Pair(it.cur,it.value))
+            }
+            _state.emit(CurrenciesState.Symbols(symbols))
         }
     }
 

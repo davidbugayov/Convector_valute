@@ -4,7 +4,6 @@ import com.convector.david_000.convector_valute.data.local.CurrenciesDatabase
 import com.convector.david_000.convector_valute.data.local.SymbolsItem
 import com.convector.david_000.convector_valute.network.CurrencyApiRetrofit
 import com.convector.david_000.convector_valute.data.remote.responce.ConvertDto
-import com.convector.david_000.convector_valute.data.remote.responce.SymbolsDto
 import com.convector.david_000.convector_valute.utils.handle
 import javax.inject.Inject
 
@@ -20,13 +19,29 @@ class CurrenciesRepository @Inject constructor(
             }
     }
 
-    suspend fun getSymbols(): SymbolsItem? {
-        return if(currencyApiRetrofit.symbols().isSuccessful && currencyApiRetrofit.symbols().body()!= null){
-            val symbolsItem = SymbolsItem(symbols = currencyApiRetrofit.symbols().body()!!.symbols)
-            currenciesDatabase.currenciesDao.updateCurrencies(symbolsItem)
-            symbolsItem
-        }else{
-            currenciesDatabase.currenciesDao.getCurrencies()
+    suspend fun getSymbols(): List<SymbolsItem> {
+        val currenciesCache = currenciesDatabase.currenciesDao.getCurrencies()
+        return if (currenciesCache.isNotEmpty()) {
+            currenciesCache
+        } else {
+            val symbolsRest = currencyApiRetrofit.symbols()
+            if (symbolsRest.isSuccessful && symbolsRest.body() != null
+            ) {
+                val listSymbols = mutableListOf<SymbolsItem>()
+                symbolsRest.body()!!.symbols.keys.forEach { key ->
+                    listSymbols.add(
+                        SymbolsItem(
+                            cur = key,
+                            value = symbolsRest.body()!!.symbols[key]!!
+                        )
+                    )
+                }
+                currenciesDatabase.currenciesDao.insertCurrencies(listSymbols)
+                listSymbols
+            } else {
+                emptyList()
+            }
         }
     }
+
 }
