@@ -2,8 +2,8 @@ package com.convector.david_000.convector_valute.di
 
 import android.content.Context
 import androidx.room.Room
-import com.convector.david_000.convector_valute.data.local.CurrenciesDao
-import com.convector.david_000.convector_valute.data.local.CurrenciesDatabase
+import com.convector.david_000.convector_valute.data.local.RZDDao
+import com.convector.david_000.convector_valute.data.local.RZDDatabase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -16,17 +16,17 @@ import javax.inject.Singleton
 object DatabaseModule {
     @Provides
     @Singleton
-    fun provideAppDatabase(@ApplicationContext appContext: Context): CurrenciesDatabase {
+    fun provideAppDatabase(@ApplicationContext appContext: Context): RZDDatabase {
         return Room.databaseBuilder(
             appContext,
-            CurrenciesDatabase::class.java,
-            "Currency"
+            RZDDatabase::class.java,
+            "RZD"
         ).fallbackToDestructiveMigration().build()
     }
 
     @Provides
-    fun provideChannelDao(currenciesDatabase: CurrenciesDatabase): CurrenciesDao {
-        return currenciesDatabase.currenciesDao
+    fun provideDao(database: RZDDatabase): RZDDao {
+        return database.RZDDao
     }
 
 }

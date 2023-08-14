@@ -1,6 +1,6 @@
 package com.convector.david_000.convector_valute.di
 
-import com.convector.david_000.convector_valute.network.CurrencyApiRetrofit
+import com.convector.david_000.convector_valute.network.RZDApiRetrofit
 import com.convector.david_000.convector_valute.network.interceptor.CurrencyApiInterceptor
 import dagger.Module
 import dagger.Provides
@@ -14,10 +14,10 @@ object NetworkModule {
 
     @Singleton
     @Provides
-    fun provideRetrofit(): CurrencyApiRetrofit {
-        return CurrencyApiRetrofit.CurrencyApi(
-            "https://api.apilayer.com/",
-            CurrencyApiRetrofit::class.java,
+    fun provideApiRetrofit(): RZDApiRetrofit {
+        return RZDApiRetrofit.RZDApi(
+            "https://pass.rzd.ru/",
+            RZDApiRetrofit::class.java,
             defaultInterceptors =  arrayListOf(CurrencyApiInterceptor())
         ).create(true,)
 

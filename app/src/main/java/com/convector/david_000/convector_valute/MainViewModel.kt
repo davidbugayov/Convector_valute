@@ -2,9 +2,9 @@ package com.convector.david_000.convector_valute
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.convector.david_000.convector_valute.model.CurrenciesState
-import com.convector.david_000.convector_valute.model.СurrencyAction
-import com.convector.david_000.convector_valute.network.repository.CurrenciesRepository
+import com.convector.david_000.convector_valute.model.RZDAction
+import com.convector.david_000.convector_valute.model.RZDState
+import com.convector.david_000.convector_valute.network.repository.RZDRepository
 import com.convector.david_000.convector_valute.utils.EventSharedFlow
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
@@ -16,14 +16,14 @@ import kotlinx.coroutines.launch
 
 @HiltViewModel
 class MainViewModel @Inject constructor(
-    private val currenciesRepository: CurrenciesRepository
+    private val rzdRepository: RZDRepository
 ) : ViewModel() {
 
 
-    private val _actions = EventSharedFlow<СurrencyAction>()
+    private val _actions = EventSharedFlow<RZDAction>()
     val actions = _actions.asSharedFlow()
 
-    private val _state = MutableStateFlow<CurrenciesState>(CurrenciesState.Loading)
+    private val _state = MutableStateFlow<RZDState>(RZDState.Loading)
     val state = _state.asStateFlow()
 
     fun getCurrencies() {
@@ -32,13 +32,10 @@ class MainViewModel @Inject constructor(
         }
     }
 
-    fun getSymbols() {
+    fun getSuggestedStation(stationName: String) {
         viewModelScope.launch(Dispatchers.IO) {
-            val symbols = mutableListOf<Pair<String,String>>()
-            currenciesRepository.getSymbols().forEach {
-                symbols.add(Pair(it.cur,it.value))
-            }
-            _state.emit(CurrenciesState.Symbols(symbols))
+           val suggestStation = rzdRepository.stations(stationName)
+            _state.emit(RZDState.Stations(suggestStation))
         }
     }
 
