@@ -40,11 +40,14 @@ class MainFragment : Fragment() {
         viewModel.state
             .onEach(::handleState)
             .launchIn(viewLifecycleOwner.lifecycleScope)
-        binding.cityField.doOnTextChanged { text, start, before, count ->
-            if(count > 2){
-                viewModel.getSuggestedStation(text.toString())
-            }
+        binding.cityField.editText.setOnClickListener {
+
         }
+//        doOnTextChanged { text, start, before, count ->
+//            if(count > 2){
+//                viewModel.getSuggestedStation(text.toString())
+//            }
+//        }
     }
 
     private fun handleState(state: RZDState) {
