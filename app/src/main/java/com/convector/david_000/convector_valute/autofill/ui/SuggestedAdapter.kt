@@ -1,39 +1,39 @@
-package com.convector.david_000.convector_valute
+package com.convector.david_000.convector_valute.autofill.ui
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.convector.david_000.convector_valute.data.StationItem
-import com.convector.david_000.convector_valute.databinding.ItemCurrencyBinding
+import com.convector.david_000.convector_valute.databinding.ItemSuggestedBinding
 
-class CurrenciesAdapter(
+class SuggestedAdapter(
     private val list: List<StationItem>,
     private val onItemClick: (Int) -> Unit
-) : RecyclerView.Adapter<CurrenciesAdapter.CurrencyHolder>() {
+) : RecyclerView.Adapter<SuggestedAdapter.SuggestedHolder>() {
 
     override fun getItemCount(): Int = list.size
 
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int
-    ): CurrenciesAdapter.CurrencyHolder {
-        val binding = ItemCurrencyBinding
+    ): SuggestedHolder {
+        val binding = ItemSuggestedBinding
             .inflate(LayoutInflater.from(parent.context), parent, false)
-        return CurrencyHolder(binding)
+        return SuggestedHolder(binding)
     }
 
 
-    override fun onBindViewHolder(holder: CurrenciesAdapter.CurrencyHolder, position: Int) {
+    override fun onBindViewHolder(holder: SuggestedHolder, position: Int) {
         holder.setItem(list[position])
     }
 
-    inner class CurrencyHolder(private val binding: ItemCurrencyBinding) :
+    inner class SuggestedHolder(private val binding: ItemSuggestedBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun setItem(item: StationItem) {
             with(binding) {
                 root.setOnClickListener { onItemClick.invoke(adapterPosition) }
-                binding.textCurrencyName.text = item.name
-                binding.textCurrencyAmount.text = item.code.toString()
+                binding.nameText.text = item.name
+                binding.codeText.text = item.code.toString()
             }
         }
     }
