@@ -47,6 +47,11 @@ class MainFragment : Fragment() {
                 autoFillDialogFragment.show(childFragmentManager, "AutoFillDialogFragment")
             }
         }
+//        doOnTextChanged { text, start, before, count ->
+//            if(count > 2){
+//                viewModel.getSuggestedStation(text.toString())
+//            }
+//        }
     }
 
     private fun handleState(state: RZDState) {
