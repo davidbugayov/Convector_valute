@@ -15,6 +15,10 @@ import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.RecyclerView
+import com.convector.david_000.convector_valute.MainFragment.Companion.ADDRESS_FROM
+import com.convector.david_000.convector_valute.MainFragment.Companion.ADDRESS_TO
+import com.convector.david_000.convector_valute.MainFragment.Companion.AUTOFILL
+import com.convector.david_000.convector_valute.MainFragment.Companion.IS_FROM
 import com.convector.david_000.convector_valute.R
 import com.convector.david_000.convector_valute.autofill.ui.SuggestedAdapter
 import com.convector.david_000.convector_valute.autofill.vm.AutoFillState
@@ -37,7 +41,8 @@ class AutoFillDialogFragment : BottomSheetDialogFragment() {
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?): View {
+        savedInstanceState: Bundle?
+    ): View {
         _binding = FragmentAutofillBinding.inflate(layoutInflater)
         setupView()
         return binding.root
@@ -51,11 +56,11 @@ class AutoFillDialogFragment : BottomSheetDialogFragment() {
         binding.autoEditText.doOnTextChanged { text, start, before, count ->
 //            handleState(AutoFillState.Loading)
 //            if(count > 2) {
-                autoFillViewModel.getSuggestedStation(text.toString().uppercase())
+            autoFillViewModel.getSuggestedStation(text.toString().uppercase())
             //}
         }
 
-        arguments?.getString("autofill")?.let {
+        arguments?.getString(AUTOFILL)?.let {
             binding.autoEditText.setText(it)
         }
     }
@@ -67,12 +72,14 @@ class AutoFillDialogFragment : BottomSheetDialogFragment() {
                 binding.suggestedRecycler.isVisible = false
                 binding.errorView.root.isVisible = false
             }
+
             is AutoFillState.Content -> {
                 binding.suggestedProgress.isVisible = false
                 binding.suggestedRecycler.isVisible = true
                 binding.suggestedRecycler.update(state.stationList)
                 binding.errorView.root.isVisible = false
             }
+
             is AutoFillState.Empty -> {
                 binding.suggestedProgress.isVisible = false
                 binding.errorView.root.isVisible = true
@@ -80,6 +87,7 @@ class AutoFillDialogFragment : BottomSheetDialogFragment() {
                 binding.errorView.titleText.text = getString(R.string.some_error_title)
                 binding.errorView.descriptionText.text = getString(R.string.empty_description)
             }
+
             is AutoFillState.Error -> {
                 binding.suggestedProgress.isVisible = false
                 binding.errorView.root.isVisible = true
@@ -92,7 +100,12 @@ class AutoFillDialogFragment : BottomSheetDialogFragment() {
 
     private fun RecyclerView.update(station: List<StationItem>) {
         adapter = SuggestedAdapter(station) { pos ->
-            setFragmentResult("address", bundleOf("address_key" to station[pos].name))
+            val requestKey = if (arguments?.getBoolean(IS_FROM) != false) {
+                ADDRESS_FROM
+            } else {
+                ADDRESS_TO
+            }
+            setFragmentResult(requestKey, bundleOf(requestKey to station[pos]))
             this@AutoFillDialogFragment.dismiss()
         }
     }

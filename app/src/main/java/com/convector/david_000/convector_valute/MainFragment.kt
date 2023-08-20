@@ -14,6 +14,8 @@ import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.convector.david_000.convector_valute.autofill.AutoFillDialogFragment
+import com.convector.david_000.convector_valute.core.getParcel
+import com.convector.david_000.convector_valute.data.StationItem
 import com.convector.david_000.convector_valute.databinding.FragmentMainBinding
 import com.convector.david_000.convector_valute.model.RZDState
 import dagger.hilt.android.AndroidEntryPoint
@@ -46,27 +48,8 @@ class MainFragment : Fragment() {
             .onEach(::handleState)
             .launchIn(viewLifecycleOwner.lifecycleScope)
         autoFillDialogFragment = AutoFillDialogFragment()
-
-        setFragmentResultListener("address") { key, bundle ->
-            val result = bundle.getString("address_key")
-            Toast.makeText(requireContext(), result.toString(), Toast.LENGTH_LONG).show()
-            Handler(Looper.getMainLooper()).postDelayed({
-                binding.stationFromField.editText.apply {
-                    tag = "Set value TextChange doesn't call"
-                    setText(result.toString())
-                    tag = null
-                }
-            }, 222L)
-        }
-
-        binding.stationFromField.editText.doAfterTextChanged {
-            if ((it?.length ?: 0) > 2 && binding.stationFromField.editText.tag == null) {
-                val bundle = Bundle()
-                bundle.putString("autofill", it.toString().uppercase())
-                autoFillDialogFragment.arguments = bundle
-                autoFillDialogFragment.show(parentFragmentManager, "AutoFillDialogFragment")
-            }
-        }
+        setFromField()
+        setToField()
     }
 
     private fun handleState(state: RZDState) {
@@ -81,14 +64,71 @@ class MainFragment : Fragment() {
         }
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
+    private fun setFromField() {
+        setFromResult()
+        binding.stationFromField.subtitleTextView.text = getString(R.string.from)
+        binding.stationFromField.editText.doAfterTextChanged {
+            if ((it?.length ?: 0) > 2 && binding.stationFromField.editText.tag == null) {
+                val bundle = Bundle()
+                bundle.putString(AUTOFILL, it.toString().uppercase())
+                bundle.putBoolean(IS_FROM, true)
 
+                autoFillDialogFragment.arguments = bundle
+                autoFillDialogFragment.show(parentFragmentManager, "AutoFillDialogFragment")
+            }
+        }
     }
 
+    private fun setFromResult() {
+        setFragmentResultListener(ADDRESS_FROM) { key, bundle ->
+            val result = bundle.getParcel(ADDRESS_FROM) as? StationItem
 
+            Handler(Looper.getMainLooper()).postDelayed({
+                binding.stationFromField.editText.apply {
+                    tag = "Set value TextChange doesn't call"
+                    setText(result?.name.toString())
+                    tag = null
+                }
+            }, 222L)
+        }
+
+    }
+    private fun setToField() {
+        setToResult()
+        binding.stationToField.subtitleTextView.text = getString(R.string.to)
+        binding.stationToField.editText.doAfterTextChanged {
+            if ((it?.length ?: 0) > 2 && binding.stationToField.editText.tag == null) {
+                val bundle = Bundle()
+                bundle.putString(AUTOFILL, it.toString().uppercase())
+                bundle.putBoolean(IS_FROM, false)
+                autoFillDialogFragment.arguments = bundle
+                autoFillDialogFragment.show(parentFragmentManager, "AutoFillDialogFragment")
+            }
+        }
+    }
+
+    private fun setToResult() {
+        setFragmentResultListener(ADDRESS_TO) { key, bundle ->
+            val result = bundle.getParcel(ADDRESS_TO) as? StationItem
+
+            Handler(Looper.getMainLooper()).postDelayed({
+                binding.stationToField.editText.apply {
+                    tag = "Set value TextChange doesn't call"
+                    setText(result?.name.toString())
+                    tag = null
+                }
+            }, 222L)
+        }
+    }
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    companion object{
+        const val ADDRESS_FROM  = "address_from"
+        const val ADDRESS_TO  = "address_to"
+        const val IS_FROM  = "is_from"
+        const val AUTOFILL  = "autofill"
     }
 }

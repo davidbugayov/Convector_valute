@@ -23,6 +23,7 @@ interface RZDDao {
 
     @Update
     suspend fun updateStations(stations: List<Stations>)
+
 }
 
 
