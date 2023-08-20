@@ -3,6 +3,7 @@ package com.convector.david_000.convector_valute.autofill.vm
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.convector.david_000.convector_valute.core.BaseViewModel
+import com.convector.david_000.convector_valute.data.StationItem
 import com.convector.david_000.convector_valute.model.RZDAction
 import com.convector.david_000.convector_valute.model.RZDState
 import com.convector.david_000.convector_valute.network.repository.RZDRepository
@@ -30,15 +31,17 @@ class AutoFillViewModel @Inject constructor(
     val state = _state.asStateFlow()
 
     fun getSuggestedStation(stationName: String) {
-        safeLaunch(
-            coroutineContext =  Dispatchers.IO,
-            {
-                Timber.e(it)
-            }
+        safeLaunch(onFailure = { _state.emit(AutoFillState.Error) }) {
             _state.emit(AutoFillState.Loading)
             val suggestStation = rzdRepository.stations(stationName)
-            _state.emit(AutoFillState.Content(suggestStation))
-        )
+            _state.emit(
+                if (suggestStation.isNotEmpty()) {
+                    AutoFillState.Content(suggestStation)
+                } else {
+                    AutoFillState.Empty
+                }
+            )
+        }
     }
 
 }

@@ -1,8 +1,10 @@
 package com.convector.david_000.convector_valute.network
 
 import com.convector.david_000.convector_valute.network.deserializers.DateDeserializer
+import com.convector.david_000.convector_valute.network.deserializers.NullOnEmptyConverterFactory
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
+import java.lang.reflect.Type
 import java.util.*
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
@@ -10,7 +12,9 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.converter.scalars.ScalarsConverterFactory
 import java.util.concurrent.TimeUnit
+import okhttp3.ResponseBody
 import okhttp3.logging.HttpLoggingInterceptor
+import retrofit2.Converter
 import kotlin.collections.ArrayList
 
 private const val TIMEOUT = 1L
@@ -101,6 +105,7 @@ abstract class IRetrofitApiFactory<RetrofitInterface>(
 }
 
 fun Retrofit.Builder.addConverterFactories(gson: Gson): Retrofit.Builder {
+    this.addConverterFactory(NullOnEmptyConverterFactory())
     this.addConverterFactory(ScalarsConverterFactory.create())
     this.addConverterFactory(GsonConverterFactory.create(gson))
     return this

@@ -1,11 +1,16 @@
 package com.convector.david_000.convector_valute
 
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.core.widget.doAfterTextChanged
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.convector.david_000.convector_valute.autofill.AutoFillDialogFragment
@@ -14,6 +19,8 @@ import com.convector.david_000.convector_valute.model.RZDState
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import kotlin.math.abs
+
 
 @AndroidEntryPoint
 class MainFragment : Fragment() {
@@ -38,20 +45,28 @@ class MainFragment : Fragment() {
         viewModel.state
             .onEach(::handleState)
             .launchIn(viewLifecycleOwner.lifecycleScope)
-        binding.stationFromField.editText.doOnTextChanged { text, start, before, count ->
-            if (count > 2) {
-                autoFillDialogFragment = AutoFillDialogFragment()
+        autoFillDialogFragment = AutoFillDialogFragment()
+
+        setFragmentResultListener("address") { key, bundle ->
+            val result = bundle.getString("address_key")
+            Toast.makeText(requireContext(), result.toString(), Toast.LENGTH_LONG).show()
+            Handler(Looper.getMainLooper()).postDelayed({
+                binding.stationFromField.editText.apply {
+                    tag = "Set value TextChange doesn't call"
+                    setText(result.toString())
+                    tag = null
+                }
+            }, 222L)
+        }
+
+        binding.stationFromField.editText.doAfterTextChanged {
+            if ((it?.length ?: 0) > 2 && binding.stationFromField.editText.tag == null) {
                 val bundle = Bundle()
-                bundle.putString("autofill", text.toString())
+                bundle.putString("autofill", it.toString().uppercase())
                 autoFillDialogFragment.arguments = bundle
-                autoFillDialogFragment.show(childFragmentManager, "AutoFillDialogFragment")
+                autoFillDialogFragment.show(parentFragmentManager, "AutoFillDialogFragment")
             }
         }
-//        doOnTextChanged { text, start, before, count ->
-//            if(count > 2){
-//                viewModel.getSuggestedStation(text.toString())
-//            }
-//        }
     }
 
     private fun handleState(state: RZDState) {
@@ -59,6 +74,7 @@ class MainFragment : Fragment() {
             RZDState.Loading -> {
 
             }
+
             is RZDState.Stations -> {
 
             }
@@ -69,7 +85,6 @@ class MainFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
     }
-
 
 
     override fun onDestroyView() {

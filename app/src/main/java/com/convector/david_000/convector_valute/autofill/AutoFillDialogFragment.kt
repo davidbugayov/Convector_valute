@@ -5,14 +5,21 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.core.widget.doOnTextChanged
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.clearFragmentResultListener
+import androidx.fragment.app.setFragmentResult
+import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.RecyclerView
+import com.convector.david_000.convector_valute.R
 import com.convector.david_000.convector_valute.autofill.ui.SuggestedAdapter
 import com.convector.david_000.convector_valute.autofill.vm.AutoFillState
 import com.convector.david_000.convector_valute.autofill.vm.AutoFillViewModel
+import com.convector.david_000.convector_valute.core.getParcel
 import com.convector.david_000.convector_valute.data.StationItem
 import com.convector.david_000.convector_valute.databinding.FragmentAutofillBinding
 import com.convector.david_000.convector_valute.model.RZDState
@@ -40,14 +47,16 @@ class AutoFillDialogFragment : BottomSheetDialogFragment() {
         autoFillViewModel.state
             .onEach(::handleState)
             .launchIn(viewLifecycleOwner.lifecycleScope)
+
+        binding.autoEditText.doOnTextChanged { text, start, before, count ->
+//            handleState(AutoFillState.Loading)
+//            if(count > 2) {
+                autoFillViewModel.getSuggestedStation(text.toString().uppercase())
+            //}
+        }
+
         arguments?.getString("autofill")?.let {
             binding.autoEditText.setText(it)
-            autoFillViewModel.getSuggestedStation(it)
-        }
-        binding.autoEditText.doOnTextChanged { text, start, before, count ->
-            if(count > 2) {
-                autoFillViewModel.getSuggestedStation(text.toString())
-            }
         }
     }
 
@@ -56,25 +65,35 @@ class AutoFillDialogFragment : BottomSheetDialogFragment() {
             AutoFillState.Loading -> {
                 binding.suggestedProgress.isVisible = true
                 binding.suggestedRecycler.isVisible = false
+                binding.errorView.root.isVisible = false
             }
             is AutoFillState.Content -> {
                 binding.suggestedProgress.isVisible = false
                 binding.suggestedRecycler.isVisible = true
                 binding.suggestedRecycler.update(state.stationList)
+                binding.errorView.root.isVisible = false
             }
             is AutoFillState.Empty -> {
-
+                binding.suggestedProgress.isVisible = false
+                binding.errorView.root.isVisible = true
+                binding.suggestedRecycler.isVisible = false
+                binding.errorView.titleText.text = getString(R.string.some_error_title)
+                binding.errorView.descriptionText.text = getString(R.string.empty_description)
             }
             is AutoFillState.Error -> {
-
+                binding.suggestedProgress.isVisible = false
+                binding.errorView.root.isVisible = true
+                binding.suggestedRecycler.isVisible = false
+                binding.errorView.titleText.text = getString(R.string.some_error_title)
+                binding.errorView.descriptionText.text = getString(R.string.some_error_description)
             }
         }
     }
 
     private fun RecyclerView.update(station: List<StationItem>) {
         adapter = SuggestedAdapter(station) { pos ->
-            Toast.makeText(this.context, "HYI", Toast.LENGTH_LONG).show()
-            // findNavController().safeNavigate(OnboardingStage4DialogDirections.openShortInfo(cardListData[pos].name))
+            setFragmentResult("address", bundleOf("address_key" to station[pos].name))
+            this@AutoFillDialogFragment.dismiss()
         }
     }
 

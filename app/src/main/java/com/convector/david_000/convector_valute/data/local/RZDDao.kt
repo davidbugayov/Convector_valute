@@ -12,22 +12,21 @@ import androidx.room.Update
 @Dao
 interface RZDDao {
 
-    @Query("SELECT * FROM Stations WHERE stationName= :stationNamePart")
-    suspend fun getStations(stationNamePart: String):List<Stations>
+    @Query("SELECT * FROM Stations")
+    suspend fun getStations(): List<Stations>
+
+    @Query("SELECT * FROM Stations WHERE stationName LIKE '%' || :stationNamePart || '%'")
+    suspend fun getStationsByName(stationNamePart: String): List<Stations>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertStations(stations: List<Stations>)
 
     @Update
     suspend fun updateStations(stations: List<Stations>)
-//
-//    @Delete
-//    suspend fun deleteCurrencies(symbols: SymbolsItem)
-
 }
 
 
-@Database(entities = [Stations::class,], version = 1, exportSchema = false)
+@Database(entities = [Stations::class], version = 1, exportSchema = false)
 abstract class RZDDatabase : RoomDatabase() {
     abstract val RZDDao: RZDDao
 }

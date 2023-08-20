@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">Отслеживание билетов</string>
+    <string name="some_error_title">Произошла ошибочка</string>
+    <string name="some_error_description">Попробуйте что-нибудь другое ввести</string>
+    <string name="empty_description">Пустой ответ введи что-нибудь другое</string>
+    <string name="hint_address">Адрес</string>
 </resources>
