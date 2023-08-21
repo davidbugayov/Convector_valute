@@ -6,4 +6,5 @@
     <string name="hint_address">Адрес</string>
     <string name="from">откуда</string>
     <string name="to">куда</string>
+    <string name="departure_date">Дата отправления</string>
 </resources>

@@ -21,9 +21,6 @@ interface RZDDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertStations(stations: List<Stations>)
 
-    @Update
-    suspend fun updateStations(stations: List<Stations>)
-
 }
 
 
