@@ -9,6 +9,27 @@
         android:id="@+id/main_fragment"
         android:label="main_fragment"
         android:name="com.convector.david_000.convector_valute.MainFragment"
-        tools:layout="@layout/fragment_main"/>
+        tools:layout="@layout/fragment_main">
 
+    <action
+        android:id="@+id/open_autofill"
+        app:destination="@+id/autofill_fragment">
+
+       </action>
+    </fragment>
+
+    <dialog
+        android:id="@+id/autofill_fragment"
+        android:label="auto_fill_dialog"
+        android:name="com.convector.david_000.convector_valute.autofill.AutoFillDialogFragment"
+        tools:layout="@layout/fragment_autofill">
+        <argument
+            android:name="isFrom"
+            android:defaultValue="false"
+            app:argType="boolean" />
+        <argument
+            android:name="autofill"
+            android:defaultValue=""
+            app:argType="string" />
+    </dialog>
 </navigation>

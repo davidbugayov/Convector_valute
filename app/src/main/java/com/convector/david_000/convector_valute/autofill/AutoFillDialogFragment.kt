@@ -14,19 +14,16 @@ import androidx.fragment.app.setFragmentResult
 import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.RecyclerView
 import com.convector.david_000.convector_valute.MainFragment.Companion.ADDRESS_FROM
 import com.convector.david_000.convector_valute.MainFragment.Companion.ADDRESS_TO
-import com.convector.david_000.convector_valute.MainFragment.Companion.AUTOFILL
-import com.convector.david_000.convector_valute.MainFragment.Companion.IS_FROM
 import com.convector.david_000.convector_valute.R
 import com.convector.david_000.convector_valute.autofill.ui.SuggestedAdapter
 import com.convector.david_000.convector_valute.autofill.vm.AutoFillState
 import com.convector.david_000.convector_valute.autofill.vm.AutoFillViewModel
-import com.convector.david_000.convector_valute.core.getParcel
 import com.convector.david_000.convector_valute.data.StationItem
 import com.convector.david_000.convector_valute.databinding.FragmentAutofillBinding
-import com.convector.david_000.convector_valute.model.RZDState
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.launchIn
@@ -37,6 +34,9 @@ class AutoFillDialogFragment : BottomSheetDialogFragment() {
 
     private val autoFillViewModel: AutoFillViewModel by viewModels()
     private var _binding: FragmentAutofillBinding? = null
+
+    private val args by navArgs<AutoFillDialogFragmentArgs>()
+
     private val binding get() = _binding!!
 
     override fun onCreateView(
@@ -53,16 +53,11 @@ class AutoFillDialogFragment : BottomSheetDialogFragment() {
             .onEach(::handleState)
             .launchIn(viewLifecycleOwner.lifecycleScope)
 
-        binding.autoEditText.doOnTextChanged { text, start, before, count ->
-//            handleState(AutoFillState.Loading)
-//            if(count > 2) {
+        binding.autoEditText.doOnTextChanged { text, _, _, _ ->
             autoFillViewModel.getSuggestedStation(text.toString().uppercase())
-            //}
         }
 
-        arguments?.getString(AUTOFILL)?.let {
-            binding.autoEditText.setText(it)
-        }
+        binding.autoEditText.setText(args.autofill)
     }
 
     private fun handleState(state: AutoFillState) {
@@ -100,7 +95,7 @@ class AutoFillDialogFragment : BottomSheetDialogFragment() {
 
     private fun RecyclerView.update(station: List<StationItem>) {
         adapter = SuggestedAdapter(station) { pos ->
-            val requestKey = if (arguments?.getBoolean(IS_FROM) != false) {
+            val requestKey = if (args.isFrom) {
                 ADDRESS_FROM
             } else {
                 ADDRESS_TO

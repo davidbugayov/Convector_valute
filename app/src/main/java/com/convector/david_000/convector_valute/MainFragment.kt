@@ -13,6 +13,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import com.convector.david_000.convector_valute.autofill.AutoFillDialogFragment
 import com.convector.david_000.convector_valute.core.getParcel
 import com.convector.david_000.convector_valute.data.StationItem
@@ -69,12 +70,7 @@ class MainFragment : Fragment() {
         binding.stationFromField.subtitleTextView.text = getString(R.string.from)
         binding.stationFromField.editText.doAfterTextChanged {
             if ((it?.length ?: 0) > 2 && binding.stationFromField.editText.tag == null) {
-                val bundle = Bundle()
-                bundle.putString(AUTOFILL, it.toString().uppercase())
-                bundle.putBoolean(IS_FROM, true)
-
-                autoFillDialogFragment.arguments = bundle
-                autoFillDialogFragment.show(parentFragmentManager, "AutoFillDialogFragment")
+                findNavController().navigate(MainFragmentDirections.openAutofill(true,it.toString().uppercase()))
             }
         }
     }
@@ -98,17 +94,13 @@ class MainFragment : Fragment() {
         binding.stationToField.subtitleTextView.text = getString(R.string.to)
         binding.stationToField.editText.doAfterTextChanged {
             if ((it?.length ?: 0) > 2 && binding.stationToField.editText.tag == null) {
-                val bundle = Bundle()
-                bundle.putString(AUTOFILL, it.toString().uppercase())
-                bundle.putBoolean(IS_FROM, false)
-                autoFillDialogFragment.arguments = bundle
-                autoFillDialogFragment.show(parentFragmentManager, "AutoFillDialogFragment")
+                findNavController().navigate(MainFragmentDirections.openAutofill(false,it.toString().uppercase()))
             }
         }
     }
 
     private fun setToResult() {
-        setFragmentResultListener(ADDRESS_TO) { key, bundle ->
+        setFragmentResultListener(ADDRESS_TO) { _, bundle ->
             val result = bundle.getParcel(ADDRESS_TO) as? StationItem
 
             Handler(Looper.getMainLooper()).postDelayed({
@@ -128,7 +120,5 @@ class MainFragment : Fragment() {
     companion object{
         const val ADDRESS_FROM  = "address_from"
         const val ADDRESS_TO  = "address_to"
-        const val IS_FROM  = "is_from"
-        const val AUTOFILL  = "autofill"
     }
 }

@@ -28,9 +28,9 @@ class RZDRepository @Inject constructor(
                 Stations(it.n, it.c, it.S, it.L)
             }
             database.RZDDao.insertStations(stations = stations)
-            database.RZDDao.getStationsByName(stationNamePart).map {
-                StationItem(it.stationName, it.stationCode)
-            }
+            stations.map {
+                    StationItem(it.stationName, it.stationCode)
+                }
         } else {
             emptyList()
         }
