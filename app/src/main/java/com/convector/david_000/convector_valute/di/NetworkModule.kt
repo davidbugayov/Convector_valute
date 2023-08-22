@@ -1,7 +1,7 @@
 package com.convector.david_000.convector_valute.di
 
 import com.convector.david_000.convector_valute.network.RZDApiRetrofit
-import com.convector.david_000.convector_valute.network.interceptor.CurrencyApiInterceptor
+import com.convector.david_000.convector_valute.network.interceptor.CookieApiInterceptor
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -18,7 +18,7 @@ object NetworkModule {
         return RZDApiRetrofit.RZDApi(
             "https://pass.rzd.ru/",
             RZDApiRetrofit::class.java,
-            defaultInterceptors =  arrayListOf(CurrencyApiInterceptor())
+            defaultInterceptors = arrayListOf(CookieApiInterceptor())
         ).create(true,)
 
     }

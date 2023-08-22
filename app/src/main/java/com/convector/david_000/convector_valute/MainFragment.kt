@@ -14,6 +14,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.convector.david_000.convector_valute.core.getParcel
 import com.convector.david_000.convector_valute.data.StationItem
+import com.convector.david_000.convector_valute.data.TravelFields
 import com.convector.david_000.convector_valute.databinding.FragmentMainBinding
 import com.convector.david_000.convector_valute.model.RZDState
 import com.google.android.material.datepicker.MaterialDatePicker
@@ -29,6 +30,7 @@ class MainFragment : Fragment() {
     private val viewModel: MainViewModel by viewModels()
 
     private var _binding: FragmentMainBinding? = null
+    private var travelFields: TravelFields = TravelFields()
     private val sdf = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
     private val binding get() = _binding!!
 
@@ -51,7 +53,8 @@ class MainFragment : Fragment() {
         setToField()
         setDateField()
         binding.nextStep.setOnClickListener {
-            findNavController().navigate(MainFragmentDirections.openTrain())
+            if (travelFields.isValid())
+                findNavController().navigate(MainFragmentDirections.openTrain(travelFields))
         }
     }
 
@@ -75,7 +78,12 @@ class MainFragment : Fragment() {
         }
         binding.stationFromField.editText.doAfterTextChanged {
             if ((it?.length ?: 0) > 2 && binding.stationFromField.editText.tag == null) {
-                findNavController().navigate(MainFragmentDirections.openAutofill(true,it.toString().uppercase()))
+                findNavController().navigate(
+                    MainFragmentDirections.openAutofill(
+                        true,
+                        it.toString().uppercase()
+                    )
+                )
             }
         }
     }
@@ -83,7 +91,7 @@ class MainFragment : Fragment() {
     private fun setFromResult() {
         setFragmentResultListener(ADDRESS_FROM) { key, bundle ->
             val result = bundle.getParcel(ADDRESS_FROM) as? StationItem
-
+            travelFields.stationFromItem = result
             Handler(Looper.getMainLooper()).postDelayed({
                 binding.stationFromField.editText.apply {
                     tag = "Set value TextChange doesn't call"
@@ -94,6 +102,7 @@ class MainFragment : Fragment() {
         }
 
     }
+
     private fun setToField() {
         setToResult()
         binding.stationToField.inputLayout.apply {
@@ -102,7 +111,12 @@ class MainFragment : Fragment() {
         }
         binding.stationToField.editText.doAfterTextChanged {
             if ((it?.length ?: 0) > 2 && binding.stationToField.editText.tag == null) {
-                findNavController().navigate(MainFragmentDirections.openAutofill(false,it.toString().uppercase()))
+                findNavController().navigate(
+                    MainFragmentDirections.openAutofill(
+                        false,
+                        it.toString().uppercase()
+                    )
+                )
             }
         }
     }
@@ -110,7 +124,7 @@ class MainFragment : Fragment() {
     private fun setToResult() {
         setFragmentResultListener(ADDRESS_TO) { _, bundle ->
             val result = bundle.getParcel(ADDRESS_TO) as? StationItem
-
+            travelFields.stationToItem = result
             Handler(Looper.getMainLooper()).postDelayed({
                 binding.stationToField.editText.apply {
                     tag = "Set value TextChange doesn't call"
@@ -121,7 +135,7 @@ class MainFragment : Fragment() {
         }
     }
 
-    private fun setDateField(){
+    private fun setDateField() {
         binding.dateField.setOnClickListener {
             val datePickerBuilder: MaterialDatePicker.Builder<Long> = MaterialDatePicker
                 .Builder
@@ -132,17 +146,19 @@ class MainFragment : Fragment() {
 
             datePicker.addOnPositiveButtonClickListener {
                 val date = sdf.format(it)
+                travelFields.dateTravel = it
                 binding.dateField.setText(date)
             }
         }
     }
+
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
     }
 
-    companion object{
-        const val ADDRESS_FROM  = "address_from"
-        const val ADDRESS_TO  = "address_to"
+    companion object {
+        const val ADDRESS_FROM = "address_from"
+        const val ADDRESS_TO = "address_to"
     }
 }

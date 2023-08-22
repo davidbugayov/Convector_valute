@@ -41,6 +41,7 @@ class TrainsFragment : Fragment() {
         trainsViewModel.state
             .onEach(::handleState)
             .launchIn(viewLifecycleOwner.lifecycleScope)
+        trainsViewModel.timetable()
     }
 
     private fun handleState(state: TrainsState) {

@@ -37,15 +37,12 @@ class RZDRepository @Inject constructor(
     }
 
     suspend fun tickets(): TicketsDto? {
-//        val currenciesCache = currenciesDatabase.currenciesDao.getCurrencies()
-//        return if (currenciesCache.isNotEmpty()) {
-//            currenciesCache
-//        } else {
-        val symbolsRest = apiRetrofit.tickets()
+        val symbolsRest = apiRetrofit.timetable()
         return if (symbolsRest.isSuccessful && symbolsRest.body() != null
         ) {
-            symbolsRest.body()
-
+            val body = symbolsRest.body()
+            val rid = apiRetrofit.timetableRID(rid = body!!.RID)
+            rid.body()!!
         } else {
             null
         }

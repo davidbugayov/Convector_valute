@@ -40,7 +40,9 @@
         android:name="com.convector.david_000.convector_valute.train.TrainsFragment"
         android:label="trains_fragment"
         tools:layout="@layout/fragment_trains">
-
+        <argument
+            android:name="travelField"
+            app:argType="com.convector.david_000.convector_valute.data.TravelFields" />
     </fragment>
 
 </navigation>

@@ -1,8 +1,7 @@
 package com.convector.david_000.convector_valute.train.vm
 
-import com.convector.david_000.convector_valute.autofill.vm.AutoFillAction
-import com.convector.david_000.convector_valute.autofill.vm.AutoFillState
 import com.convector.david_000.convector_valute.core.BaseViewModel
+import com.convector.david_000.convector_valute.data.TrainItem
 import com.convector.david_000.convector_valute.network.repository.RZDRepository
 import com.convector.david_000.convector_valute.utils.EventSharedFlow
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -12,7 +11,7 @@ import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 
 @HiltViewModel
-class TrainsViewModel  @Inject constructor(
+class TrainsViewModel @Inject constructor(
     private val rzdRepository: RZDRepository
 ) : BaseViewModel() {
 
@@ -22,4 +21,23 @@ class TrainsViewModel  @Inject constructor(
 
     private val _state = MutableStateFlow<TrainsState>(TrainsState.Loading)
     val state = _state.asStateFlow()
+
+    fun timetable() {
+        safeLaunch(onFailure = { _state.emit(TrainsState.Error) }) {
+            _state.emit(TrainsState.Loading)
+            val timeTable = rzdRepository.tickets()
+            TrainItem(
+                name = timeTable?.result ?: ""
+            )
+            _state.emit(
+                TrainsState.Content(
+                    listOf(
+                        TrainItem(
+                            name = timeTable?.result ?: ""
+                        )
+                    )
+                )
+            )
+        }
+    }
 }
