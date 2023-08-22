@@ -12,12 +12,10 @@ import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
-import com.convector.david_000.convector_valute.autofill.AutoFillDialogFragment
 import com.convector.david_000.convector_valute.core.getParcel
 import com.convector.david_000.convector_valute.data.StationItem
 import com.convector.david_000.convector_valute.databinding.FragmentMainBinding
 import com.convector.david_000.convector_valute.model.RZDState
-import com.google.android.material.datepicker.CalendarConstraints
 import com.google.android.material.datepicker.MaterialDatePicker
 import dagger.hilt.android.AndroidEntryPoint
 import java.text.SimpleDateFormat
@@ -31,7 +29,6 @@ class MainFragment : Fragment() {
     private val viewModel: MainViewModel by viewModels()
 
     private var _binding: FragmentMainBinding? = null
-    private lateinit var autoFillDialogFragment: AutoFillDialogFragment
     private val sdf = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
     private val binding get() = _binding!!
 
@@ -50,10 +47,12 @@ class MainFragment : Fragment() {
         viewModel.state
             .onEach(::handleState)
             .launchIn(viewLifecycleOwner.lifecycleScope)
-        autoFillDialogFragment = AutoFillDialogFragment()
         setFromField()
         setToField()
         setDateField()
+        binding.nextStep.setOnClickListener {
+            findNavController().navigate(MainFragmentDirections.openTrain())
+        }
     }
 
     private fun handleState(state: RZDState) {
@@ -70,7 +69,10 @@ class MainFragment : Fragment() {
 
     private fun setFromField() {
         setFromResult()
-        binding.stationFromField.subtitleTextView.text = getString(R.string.from)
+        binding.stationFromField.inputLayout.apply {
+            hint = getString(R.string.depature_from)
+            placeholderText = getString(R.string.from)
+        }
         binding.stationFromField.editText.doAfterTextChanged {
             if ((it?.length ?: 0) > 2 && binding.stationFromField.editText.tag == null) {
                 findNavController().navigate(MainFragmentDirections.openAutofill(true,it.toString().uppercase()))
@@ -94,7 +96,10 @@ class MainFragment : Fragment() {
     }
     private fun setToField() {
         setToResult()
-        binding.stationToField.subtitleTextView.text = getString(R.string.to)
+        binding.stationToField.inputLayout.apply {
+            hint = getString(R.string.depature_to)
+            placeholderText = getString(R.string.to)
+        }
         binding.stationToField.editText.doAfterTextChanged {
             if ((it?.length ?: 0) > 2 && binding.stationToField.editText.tag == null) {
                 findNavController().navigate(MainFragmentDirections.openAutofill(false,it.toString().uppercase()))

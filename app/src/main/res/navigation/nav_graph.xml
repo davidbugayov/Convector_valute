@@ -7,21 +7,23 @@
 
     <fragment
         android:id="@+id/main_fragment"
-        android:label="main_fragment"
         android:name="com.convector.david_000.convector_valute.MainFragment"
+        android:label="main_fragment"
         tools:layout="@layout/fragment_main">
 
-    <action
-        android:id="@+id/open_autofill"
-        app:destination="@+id/autofill_fragment">
+        <action
+            android:id="@+id/open_autofill"
+            app:destination="@+id/autofill_fragment"/>
 
-       </action>
+        <action
+            android:id="@+id/open_train"
+            app:destination="@+id/trains_fragment"/>
     </fragment>
 
     <dialog
         android:id="@+id/autofill_fragment"
-        android:label="auto_fill_dialog"
         android:name="com.convector.david_000.convector_valute.autofill.AutoFillDialogFragment"
+        android:label="auto_fill_dialog"
         tools:layout="@layout/fragment_autofill">
         <argument
             android:name="isFrom"
@@ -32,4 +34,13 @@
             android:defaultValue=""
             app:argType="string" />
     </dialog>
+
+    <fragment
+        android:id="@+id/trains_fragment"
+        android:name="com.convector.david_000.convector_valute.train.TrainsFragment"
+        android:label="trains_fragment"
+        tools:layout="@layout/fragment_trains">
+
+    </fragment>
+
 </navigation>

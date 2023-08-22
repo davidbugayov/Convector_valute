@@ -5,6 +5,9 @@
     <string name="empty_description">Пустой ответ введи что-нибудь другое</string>
     <string name="hint_address">Адрес</string>
     <string name="from">откуда</string>
+    <string name="depature_from">Место отправления</string>
+    <string name="depature_to">Место прибытия</string>
     <string name="to">куда</string>
     <string name="departure_date">Дата отправления</string>
+    <string name="choose_train">Выбрать поезд</string>
 </resources>
