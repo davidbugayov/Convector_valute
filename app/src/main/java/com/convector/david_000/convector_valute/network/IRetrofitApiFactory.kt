@@ -2,20 +2,18 @@ package com.convector.david_000.convector_valute.network
 
 import com.convector.david_000.convector_valute.network.deserializers.DateDeserializer
 import com.convector.david_000.convector_valute.network.deserializers.NullOnEmptyConverterFactory
+import com.convector.david_000.convector_valute.network.interceptor.OkHttp3CookieHelper
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
-import java.lang.reflect.Type
 import java.util.*
+import java.util.concurrent.TimeUnit
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.converter.scalars.ScalarsConverterFactory
-import java.util.concurrent.TimeUnit
-import okhttp3.ResponseBody
-import okhttp3.logging.HttpLoggingInterceptor
-import retrofit2.Converter
-import kotlin.collections.ArrayList
+
 
 private const val TIMEOUT = 1L
 
@@ -62,6 +60,8 @@ abstract class IRetrofitApiFactory<RetrofitInterface>(
         val builder = OkHttpClient.Builder()
             .readTimeout(TIMEOUT, TimeUnit.MINUTES)
             .connectTimeout(TIMEOUT, TimeUnit.MINUTES)
+            .cookieJar(cookieHelper.cookieJar())
+            .followRedirects(false)
         interceptors.forEach { interceptor ->
             builder.addInterceptor(interceptor)
         }
@@ -95,12 +95,19 @@ abstract class IRetrofitApiFactory<RetrofitInterface>(
             .build()
     }
 
-    private fun createWithLogger(gson: Gson, additionalInterceptors: List<Interceptor>? = null): Retrofit {
+    private fun createWithLogger(
+        gson: Gson,
+        additionalInterceptors: List<Interceptor>? = null
+    ): Retrofit {
         return Retrofit.Builder()
             .client(createDebugHttpClient(additionalInterceptors))
             .baseUrl(baseUrl)
             .addConverterFactories(gson)
             .build()
+    }
+
+    companion object {
+        val cookieHelper = OkHttp3CookieHelper()
     }
 }
 
