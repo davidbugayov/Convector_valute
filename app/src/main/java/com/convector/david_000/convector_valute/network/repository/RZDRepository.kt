@@ -40,9 +40,13 @@ class RZDRepository @Inject constructor(
         val symbolsRest = apiRetrofit.timetable()
         return if (symbolsRest.isSuccessful && symbolsRest.body() != null
         ) {
-            val body = symbolsRest.body()
-            val rid = apiRetrofit.timetableRID(rid = body!!.RID)
-            rid.body()!!
+            val rid = symbolsRest.body()?.RID
+            //  apiRetrofit.timetableRID(rid =  rid!!).body()
+            if (rid != null) {
+                apiRetrofit.timetable(rid = rid).body()
+            } else {
+                apiRetrofit.timetable().body()
+            }
         } else {
             null
         }

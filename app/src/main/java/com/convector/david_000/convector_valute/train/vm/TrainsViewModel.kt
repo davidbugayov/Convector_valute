@@ -25,15 +25,15 @@ class TrainsViewModel @Inject constructor(
     fun timetable() {
         safeLaunch(onFailure = { _state.emit(TrainsState.Error) }) {
             _state.emit(TrainsState.Loading)
-            val timeTable = rzdRepository.tickets()
+           val timeTable = rzdRepository.tickets()
             TrainItem(
-                name = timeTable?.result ?: ""
+                name = timeTable?.RID.toString() ?: ""
             )
             _state.emit(
                 TrainsState.Content(
                     listOf(
                         TrainItem(
-                            name = timeTable?.result ?: ""
+                            name = timeTable?.RID.toString() ?: ""
                         )
                     )
                 )
