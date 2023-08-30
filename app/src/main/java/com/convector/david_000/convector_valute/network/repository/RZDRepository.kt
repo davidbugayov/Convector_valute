@@ -6,6 +6,7 @@ import com.convector.david_000.convector_valute.data.local.Stations
 import com.convector.david_000.convector_valute.data.remote.responce.TicketsDto
 import com.convector.david_000.convector_valute.network.RZDApiRetrofit
 import javax.inject.Inject
+import timber.log.Timber
 
 class RZDRepository @Inject constructor(
     private val apiRetrofit: RZDApiRetrofit,
@@ -15,7 +16,7 @@ class RZDRepository @Inject constructor(
     suspend fun stations(stationNamePart: String): List<StationItem> {
         //from db
         val localStation = database.RZDDao.getStationsByName(stationNamePart)
-        if(localStation.isNotEmpty()){
+        if (localStation.isNotEmpty()) {
             return localStation.map {
                 StationItem(it.stationName, it.stationCode)
             }
@@ -29,8 +30,8 @@ class RZDRepository @Inject constructor(
             }
             database.RZDDao.insertStations(stations = stations)
             stations.map {
-                    StationItem(it.stationName, it.stationCode)
-                }
+                StationItem(it.stationName, it.stationCode)
+            }
         } else {
             emptyList()
         }
@@ -40,9 +41,17 @@ class RZDRepository @Inject constructor(
         val symbolsRest = apiRetrofit.timetable()
         return if (symbolsRest.isSuccessful && symbolsRest.body() != null
         ) {
-            val body = symbolsRest.body()
-            val rid = apiRetrofit.timetableRID(rid = body!!.RID)
-            rid.body()!!
+            var body = symbolsRest.body()
+            var count = 1
+            var result = body?.result
+            var rid = body?.RID
+            do {
+                body = apiRetrofit.timetable(rid = rid).body()
+                count++
+                result = body?.result
+            } while (result == "RID")
+            Timber.e("ГОВНО   $count")
+            body
         } else {
             null
         }

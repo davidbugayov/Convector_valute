@@ -2,7 +2,6 @@ package com.convector.david_000.convector_valute.network
 
 import com.convector.david_000.convector_valute.network.deserializers.DateDeserializer
 import com.convector.david_000.convector_valute.network.deserializers.NullOnEmptyConverterFactory
-import com.convector.david_000.convector_valute.network.interceptor.OkHttp3CookieHelper
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import java.util.*
@@ -58,10 +57,6 @@ abstract class IRetrofitApiFactory<RetrofitInterface>(
 
     private fun createHttpClient(interceptors: List<Interceptor>): OkHttpClient {
         val builder = OkHttpClient.Builder()
-            .readTimeout(TIMEOUT, TimeUnit.MINUTES)
-            .connectTimeout(TIMEOUT, TimeUnit.MINUTES)
-            .cookieJar(cookieHelper.cookieJar())
-            .followRedirects(false)
         interceptors.forEach { interceptor ->
             builder.addInterceptor(interceptor)
         }
@@ -106,9 +101,6 @@ abstract class IRetrofitApiFactory<RetrofitInterface>(
             .build()
     }
 
-    companion object {
-        val cookieHelper = OkHttp3CookieHelper()
-    }
 }
 
 fun Retrofit.Builder.addConverterFactories(gson: Gson): Retrofit.Builder {
