@@ -3,7 +3,7 @@ package com.convector.david_000.convector_valute.network.repository
 import com.convector.david_000.convector_valute.data.StationItem
 import com.convector.david_000.convector_valute.data.local.RZDDatabase
 import com.convector.david_000.convector_valute.data.local.Stations
-import com.convector.david_000.convector_valute.data.remote.responce.TicketsDto
+import com.convector.david_000.convector_valute.data.remote.responce.TimesheetDto
 import com.convector.david_000.convector_valute.network.RZDApiRetrofit
 import javax.inject.Inject
 import timber.log.Timber
@@ -37,24 +37,29 @@ class RZDRepository @Inject constructor(
         }
     }
 
-    suspend fun tickets(): TicketsDto? {
+    suspend fun tickets(): TimesheetDto? {
+//        val timesheet = database.RZDDao.getTimesheet().timesheet
+//        return if (timesheet == null) {
         val symbolsRest = apiRetrofit.timetable()
-        return if (symbolsRest.isSuccessful && symbolsRest.body() != null
-        ) {
+        return if (symbolsRest.isSuccessful && symbolsRest.body() != null) {
             var body = symbolsRest.body()
             var count = 1
-            var result = body?.result
-            var rid = body?.RID
+            var result: String?
             do {
-                body = apiRetrofit.timetable(rid = rid).body()
+                body = apiRetrofit.timetableRID(rid = body?.RID!!).body()
                 count++
                 result = body?.result
             } while (result == "RID")
             Timber.e("ГОВНО   $count")
+            Timber.e(body!!.timestamp)
+            //  database.RZDDao.insertTimetable(Timesheet(timesheet = body!!, id = 0) )
             body
         } else {
             null
         }
+//        } else {
+//            timesheet
+//        }
     }
 
 }

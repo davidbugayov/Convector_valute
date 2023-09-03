@@ -2,12 +2,10 @@ package com.convector.david_000.convector_valute.data.local
 
 import androidx.room.Dao
 import androidx.room.Database
-import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.RoomDatabase
-import androidx.room.Update
 
 @Dao
 interface RZDDao {
@@ -20,6 +18,12 @@ interface RZDDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertStations(stations: List<Stations>)
+
+//    @Insert(onConflict = OnConflictStrategy.REPLACE)
+//    suspend fun insertTimetable(timesheet: Timesheet)
+//
+//    @Query("SELECT * FROM Timesheet")
+//    suspend fun getTimesheet(): Timesheet
 
 }
 

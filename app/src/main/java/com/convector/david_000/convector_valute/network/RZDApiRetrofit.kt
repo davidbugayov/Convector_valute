@@ -1,11 +1,9 @@
 package com.convector.david_000.convector_valute.network
 
 import com.convector.david_000.convector_valute.data.remote.responce.SuggestDTO
-import com.convector.david_000.convector_valute.data.remote.responce.TicketsDto
+import com.convector.david_000.convector_valute.data.remote.responce.TimesheetDto
 import okhttp3.Interceptor
 import retrofit2.Response
-import retrofit2.http.Field
-import retrofit2.http.FormUrlEncoded
 import retrofit2.http.GET
 import retrofit2.http.POST
 import retrofit2.http.Query
@@ -20,29 +18,28 @@ interface RZDApiRetrofit {
     ): Response<List<SuggestDTO>?>
 
 
-    @FormUrlEncoded
+    //@FormUrlEncoded
     @POST("timetable/public/ru")
     suspend fun timetable(
-        @Field("layer_id") layerId: Long = 5827,
-        @Field("dir") dir: Int = 0,// 0 - только в один конец, 1 - туда-обратно
-        @Field("tfl") tfl: Int = 3,// 3 - поезда и электрички, 2 - электрички, 1 - поезда
-        @Field("checkSeats") checkSeats: Int = 1,//1 - только с билетами, 0 - все поезда
-        @Field("code0") code0: Int = 2004000, // код станции отправления
-        @Field("code1") code1: Int = 2000000,// код станции прибытия
-        @Field("dt0") dt0: String = "31.08.2023",
+        @Query("layer_id") layerId: Long = 5827,
+        @Query("dir") dir: Int = 0,// 0 - только в один конец, 1 - туда-обратно
+        @Query("tfl") tfl: Int = 3,// 3 - поезда и электрички, 2 - электрички, 1 - поезда
+        @Query("checkSeats") checkSeats: Int = 1,//1 - только с билетами, 0 - все поезда
+        @Query("code0") code0: Int = 2004000, // код станции отправления
+        @Query("code1") code1: Int = 2000000,// код станции прибытия
+        @Query("dt0") dt0: String = "05.09.2023",
         // @Field("dt1") dt1: String = "01.09.2023",
         // @Field("time0")time0:String="00:00",
-        @Field("md") md: Int = 1,// 0 - без пересадок, 1 - с пересадками
+        @Query("md") md: Int = 1,// 0 - без пересадок, 1 - с пересадками
         ///  @Query("STRUCTURE_ID")STRUCTURE_ID:Int = 735,
-        @Field("rid") rid: Long? = null,
-    ): Response<TicketsDto>
+        @Query("rid") rid: Long? = null,
+    ): Response<TimesheetDto>
 
-    @FormUrlEncoded
     @POST("timetable/public/ru")
     suspend fun timetableRID(
-        @Field("layer_id") layerId: Int = 5827,
-        @Field("rid") rid: Long,
-    ): Response<TicketsDto>
+        @Query("layer_id") layerId: Int = 5827,
+        @Query("rid") rid: Long,
+    ): Response<TimesheetDto>
 
     @GET("services/route/basicRoute")
     suspend fun trainRoutes(
@@ -50,7 +47,7 @@ interface RZDApiRetrofit {
         // @Header("session-cookie") Session: String = "177dc6c1ea54d2ba0abed93e18991a244ba3704fc064efb8c27645f30936df71660a2365f85ef19c12169703352bb7f6",
         @Query("layer_id") layerId: Long = 5827,
         @Query("rid") rid: Long,
-    ): Response<TicketsDto>
+    ): Response<TimesheetDto>
 
     class RZDApi(
         baseUrl: String,
