@@ -21,7 +21,8 @@ object DatabaseModule {
             appContext,
             RZDDatabase::class.java,
             "RZD"
-        ).fallbackToDestructiveMigration().build()
+        )
+            .fallbackToDestructiveMigration().build()
     }
 
     @Provides

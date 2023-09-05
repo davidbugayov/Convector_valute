@@ -6,6 +6,7 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.RoomDatabase
+import androidx.room.TypeConverters
 
 @Dao
 interface RZDDao {
@@ -19,16 +20,17 @@ interface RZDDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertStations(stations: List<Stations>)
 
-//    @Insert(onConflict = OnConflictStrategy.REPLACE)
-//    suspend fun insertTimetable(timesheet: Timesheet)
-//
-//    @Query("SELECT * FROM Timesheet")
-//    suspend fun getTimesheet(): Timesheet
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertTimetable(tp: TPSheet)
+
+    @Query("SELECT * FROM Timesheet")
+    suspend fun getTimesheet(): List<TPSheet>
 
 }
 
 
-@Database(entities = [Stations::class], version = 1, exportSchema = false)
+@Database(entities = [Stations::class, TPSheet::class], version = 2, exportSchema = false)
+@TypeConverters(TpItemDtoConverter::class)
 abstract class RZDDatabase : RoomDatabase() {
     abstract val RZDDao: RZDDao
 }
