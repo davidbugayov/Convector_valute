@@ -3,9 +3,7 @@ package com.convector.david_000.convector_valute.train.ui
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.convector.david_000.convector_valute.data.StationItem
 import com.convector.david_000.convector_valute.data.TrainItem
-import com.convector.david_000.convector_valute.databinding.ItemSuggestedBinding
 import com.convector.david_000.convector_valute.databinding.ItemTrainBinding
 
 class TrainAdapter(
@@ -34,7 +32,11 @@ class TrainAdapter(
         fun setItem(item: TrainItem) {
             with(binding) {
                 root.setOnClickListener { onItemClick.invoke(adapterPosition) }
-                binding.nameText.text = item.name
+                binding.cityStartText.text = item.routeFrom
+                binding.cityEndText.text = item.stationTo
+                binding.timeStartText.text = item.fromTime
+                binding.timeEndText.text = item.toTime
+                binding.timeSpendText.text = item.timeInWay
             }
         }
     }

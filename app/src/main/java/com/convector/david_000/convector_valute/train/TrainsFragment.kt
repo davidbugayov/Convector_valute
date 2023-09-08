@@ -55,6 +55,8 @@ class TrainsFragment : Fragment() {
             is TrainsState.Content -> {
                 binding.trainsProgress.isVisible = false
                 binding.trainsRecycler.isVisible = true
+                binding.headerTitle.text =
+                    state.header.data + " " + state.header.fromStation + "-->" + state.header.toStation
                 binding.trainsRecycler.update(state.trainList)
                 binding.errorView.root.isVisible = false
             }
@@ -79,7 +81,7 @@ class TrainsFragment : Fragment() {
 
     private fun RecyclerView.update(station: List<TrainItem>) {
         adapter = TrainAdapter(station) { pos ->
-            Toast.makeText(requireContext(),station[pos].name, Toast.LENGTH_LONG).show()
+            Toast.makeText(requireContext(), station[pos].fromTime, Toast.LENGTH_LONG).show()
         }
     }
     override fun onDestroyView() {

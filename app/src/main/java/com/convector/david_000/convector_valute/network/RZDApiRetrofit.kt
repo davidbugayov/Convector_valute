@@ -25,12 +25,12 @@ interface RZDApiRetrofit {
         @Query("dir") dir: Int = 0,// 0 - только в один конец, 1 - туда-обратно
         @Query("tfl") tfl: Int = 3,// 3 - поезда и электрички, 2 - электрички, 1 - поезда
         @Query("checkSeats") checkSeats: Int = 1,//1 - только с билетами, 0 - все поезда
-        @Query("code0") code0: Int = 2004000, // код станции отправления
-        @Query("code1") code1: Int = 2000000,// код станции прибытия
-        @Query("dt0") dt0: String = "09.09.2023",
+        @Query("code0") code0: Int = 2001025, // код станции отправления
+        @Query("code1") code1: Int = 2014370,// код станции прибытия
+        @Query("dt0") dt0: String = "29.09.2023",
         // @Field("dt1") dt1: String = "01.09.2023",
         // @Field("time0")time0:String="00:00",
-        @Query("md") md: Int = 1,// 0 - без пересадок, 1 - с пересадками
+        @Query("md") md: Int = 0,// 0 - без пересадок, 1 - с пересадками
         ///  @Query("STRUCTURE_ID")STRUCTURE_ID:Int = 735,
         @Query("rid") rid: Long? = null,
     ): Response<TimesheetDto>

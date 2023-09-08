@@ -64,7 +64,7 @@ class MainFragment : Fragment() {
 
             }
 
-            is RZDState.Stations -> {
+            is RZDState.Content -> {
 
             }
         }

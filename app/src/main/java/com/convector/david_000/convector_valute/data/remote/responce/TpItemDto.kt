@@ -9,5 +9,5 @@ data class TpItemDto(
     val noSeats: Boolean,
     val defShowTime: String,
     val state: String,
-    val list: List<MidItemDto>
+    val list: List<TrainItemDto>
 )
