@@ -32,7 +32,7 @@ class TrainAdapter(
         fun setItem(item: TrainItem) {
             with(binding) {
                 root.setOnClickListener { onItemClick.invoke(adapterPosition) }
-                binding.cityStartText.text = item.routeFrom
+                binding.cityStartText.text = item.stationNameFrom
                 binding.cityEndText.text = item.stationTo
                 binding.timeStartText.text = item.fromTime
                 binding.timeEndText.text = item.toTime

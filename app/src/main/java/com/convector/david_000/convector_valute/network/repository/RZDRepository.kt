@@ -4,6 +4,7 @@ import com.convector.david_000.convector_valute.data.StationItem
 import com.convector.david_000.convector_valute.data.local.RZDDatabase
 import com.convector.david_000.convector_valute.data.local.Stations
 import com.convector.david_000.convector_valute.data.local.TPSheet
+import com.convector.david_000.convector_valute.data.remote.responce.TimesheetDto
 import com.convector.david_000.convector_valute.network.RZDApiRetrofit
 import javax.inject.Inject
 import timber.log.Timber
@@ -39,7 +40,7 @@ class RZDRepository @Inject constructor(
 
     suspend fun tickets(): List<TPSheet> {
         val tpList = database.RZDDao.getTimesheet()
-        return if (tpList.isEmpty()) {
+        return if (true) {
             val symbolsRest = apiRetrofit.timetable()
             return if (symbolsRest.isSuccessful && symbolsRest.body() != null) {
                 var body = symbolsRest.body()
@@ -50,7 +51,6 @@ class RZDRepository @Inject constructor(
                     count++
                     result = body?.result
                 } while (result == "RID")
-                Timber.e("ГОВНО   $count")
                 Timber.e(body!!.timestamp)
                 val tpListRemote = body.tp.map {
                     TPSheet(tpSheetItem = it)
@@ -64,6 +64,27 @@ class RZDRepository @Inject constructor(
             }
         } else {
             tpList
+        }
+    }
+
+    suspend fun carriage(
+        trainNum: String,
+        codeFrom: Long,
+        codeTo: Long,
+        dateTravel: String,
+        timeStart: String
+    ): TimesheetDto? {
+        val carriage = apiRetrofit.carriage(
+            tnum0 = trainNum,
+            code0 = codeFrom,
+            code1 = codeTo,
+            dt0 = dateTravel,
+            time0 = timeStart
+        )
+        return if (carriage.isSuccessful && carriage.body() != null) {
+            carriage.body()
+        } else {
+            null
         }
     }
 

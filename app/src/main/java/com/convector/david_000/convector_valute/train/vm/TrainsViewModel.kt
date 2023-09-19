@@ -10,6 +10,7 @@ import javax.inject.Inject
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
+import timber.log.Timber
 
 @HiltViewModel
 class TrainsViewModel @Inject constructor(
@@ -26,14 +27,19 @@ class TrainsViewModel @Inject constructor(
         safeLaunch(onFailure = { _state.emit(TrainsState.Error) }) {
             _state.emit(TrainsState.Loading)
             val timeTable = rzdRepository.tickets()
+            Timber.e(timeTable.toString())
             val trainList = timeTable[0].tpSheetItem.list.map {
                 TrainItem(
-                    routeFrom = it.route0,
+                    stationNameFrom = it.route0,
                     station0 = it.station0,
-                    stationTo = it.station1,
+                    stationTo = it.route1,
+                    codeFrom = it.code0,
+                    codeTo = it.code1,
                     fromTime = it.time0,
                     toTime = it.time1,
                     timeInWay = it.timeInWay,
+                    trainNum = it.number,
+                    date0 = it.date0,
                     list = listOf()
                 )
             }
@@ -46,6 +52,26 @@ class TrainsViewModel @Inject constructor(
                     ), trainList = trainList
                 )
             )
+        }
+    }
+
+    fun carriageFreeSeats(
+        trainNum: String,
+        codeFrom: Long,
+        codeTo: Long,
+        dateTravel: String,
+        timeStart: String
+    ) {
+        safeLaunch(onFailure = { _state.emit(TrainsState.Error) }) {
+            _state.emit(TrainsState.Loading)
+            val carriage = rzdRepository.carriage(
+                trainNum,
+                codeFrom,
+                codeTo,
+                dateTravel,
+                timeStart
+            )
+            Timber.e(carriage.toString())
         }
     }
 }

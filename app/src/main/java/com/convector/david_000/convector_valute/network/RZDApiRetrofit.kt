@@ -49,6 +49,24 @@ interface RZDApiRetrofit {
         @Query("rid") rid: Long,
     ): Response<TimesheetDto>
 
+    @POST("timetable/public")
+    suspend fun carriage(
+        @Query("layer_id") layerId: Long = 5827,
+        @Query("dir") dir: Int = 0,// 0 - только в один конец, 1 - туда-обратно
+        @Query("tfl") tfl: Int = 3,// 3 - поезда и электрички, 2 - электрички, 1 - поезда
+        @Query("checkSeats") checkSeats: Int = 1,//1 - только с билетами, 0 - все поезда
+        @Query("code0") code0: Long, // код станции отправления
+        @Query("code1") code1: Long,// код станции прибытия
+        @Query("dt0") dt0: String,
+        // @Field("dt1") dt1: String = "01.09.2023",
+        @Query("time0") time0: String,
+        @Query("tnum0") tnum0: String,
+        @Query("md") md: Int = 0,// 0 - без пересадок, 1 - с пересадками
+        ///  @Query("STRUCTURE_ID")STRUCTURE_ID:Int = 735,
+        @Query("rid") rid: Long? = null,
+    ): Response<TimesheetDto>
+
+
     class RZDApi(
         baseUrl: String,
         outputClass: Class<RZDApiRetrofit>,

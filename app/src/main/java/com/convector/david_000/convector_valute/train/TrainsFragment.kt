@@ -81,6 +81,14 @@ class TrainsFragment : Fragment() {
 
     private fun RecyclerView.update(station: List<TrainItem>) {
         adapter = TrainAdapter(station) { pos ->
+            val train = station[pos]
+            trainsViewModel.carriageFreeSeats(
+                train.trainNum,
+                train.codeFrom,
+                train.codeTo,
+                train.fromTime,
+                train.fromTime
+            )
             Toast.makeText(requireContext(), station[pos].fromTime, Toast.LENGTH_LONG).show()
         }
     }
