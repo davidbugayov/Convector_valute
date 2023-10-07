@@ -6,6 +6,7 @@ import com.convector.david_000.convector_valute.data.local.Stations
 import com.convector.david_000.convector_valute.data.local.TPSheet
 import com.convector.david_000.convector_valute.data.remote.responce.TimesheetDto
 import com.convector.david_000.convector_valute.network.RZDApiRetrofit
+import com.convector.david_000.convector_valute.network.interceptor.CookieApiInterceptor
 import javax.inject.Inject
 import timber.log.Timber
 
@@ -13,7 +14,6 @@ class RZDRepository @Inject constructor(
     private val apiRetrofit: RZDApiRetrofit,
     private val database: RZDDatabase
 ) {
-
     suspend fun stations(stationNamePart: String): List<StationItem> {
         //from db
         val localStation = database.RZDDao.getStationsByName(stationNamePart)
@@ -40,6 +40,7 @@ class RZDRepository @Inject constructor(
 
     suspend fun tickets(): List<TPSheet> {
         val tpList = database.RZDDao.getTimesheet()
+       // return if (tpList.isEmpty()) {
         return if (true) {
             val symbolsRest = apiRetrofit.timetable()
             return if (symbolsRest.isSuccessful && symbolsRest.body() != null) {
@@ -47,17 +48,19 @@ class RZDRepository @Inject constructor(
                 var count = 1
                 var result: String?
                 do {
-                    body = apiRetrofit.timetableRID(rid = body?.RID!!).body()
+                    body = apiRetrofit.checkRID(rid = body?.RID!!).body()
                     count++
                     result = body?.result
                 } while (result == "RID")
-                Timber.e(body!!.timestamp)
-                val tpListRemote = body.tp.map {
-                    TPSheet(tpSheetItem = it)
+                Timber.e("count $count")
+                val tpListRemote = body!!.tp.map {
+                    TPSheet(
+                        tpSheetItem = it,
+                    )
                 }
-                tpListRemote.forEach {
-                    database.RZDDao.insertTimetable(it)
-                }
+//                tpListRemote.forEach {
+//                    database.RZDDao.insertTimetable(it)
+//                }
                 tpListRemote
             } else {
                 emptyList()
@@ -71,18 +74,29 @@ class RZDRepository @Inject constructor(
         trainNum: String,
         codeFrom: Long,
         codeTo: Long,
-        dateTravel: String,
-        timeStart: String
+        startDate: String,
+        startTime: String
     ): TimesheetDto? {
+
         val carriage = apiRetrofit.carriage(
             tnum0 = trainNum,
             code0 = codeFrom,
             code1 = codeTo,
-            dt0 = dateTravel,
-            time0 = timeStart
+            dt0 = startDate,
+            time0 = startTime,
         )
         return if (carriage.isSuccessful && carriage.body() != null) {
-            carriage.body()
+            var body = carriage.body()
+            var count = 1
+            var result: String?
+            do {
+                body = apiRetrofit.checkRID(rid = body?.RID!!).body()
+                count++
+                result = body?.result
+            } while (result == "RID")
+            Timber.e("count $count")
+            Timber.e(body!!.toString())
+            body
         } else {
             null
         }

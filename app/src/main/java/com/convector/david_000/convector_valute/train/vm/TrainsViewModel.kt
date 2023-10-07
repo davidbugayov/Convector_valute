@@ -1,6 +1,7 @@
 package com.convector.david_000.convector_valute.train.vm
 
 import com.convector.david_000.convector_valute.core.BaseViewModel
+import com.convector.david_000.convector_valute.data.CarsItem
 import com.convector.david_000.convector_valute.data.HeaderItem
 import com.convector.david_000.convector_valute.data.TrainItem
 import com.convector.david_000.convector_valute.network.repository.RZDRepository
@@ -39,8 +40,14 @@ class TrainsViewModel @Inject constructor(
                     toTime = it.time1,
                     timeInWay = it.timeInWay,
                     trainNum = it.number,
-                    date0 = it.date0,
-                    list = listOf()
+                    dateStart = it.date0,
+                    list = it.cars?.map {
+                        CarsItem(
+                            carsType = it.carDataType.toString(),
+                            freeSeats = it.freeSeats,
+                            tariffPrice = it.tariff.toDouble()
+                        )
+                    } ?: emptyList()
                 )
             }
             _state.emit(
@@ -59,7 +66,7 @@ class TrainsViewModel @Inject constructor(
         trainNum: String,
         codeFrom: Long,
         codeTo: Long,
-        dateTravel: String,
+        dateStart: String,
         timeStart: String
     ) {
         safeLaunch(onFailure = { _state.emit(TrainsState.Error) }) {
@@ -68,7 +75,7 @@ class TrainsViewModel @Inject constructor(
                 trainNum,
                 codeFrom,
                 codeTo,
-                dateTravel,
+                dateStart,
                 timeStart
             )
             Timber.e(carriage.toString())

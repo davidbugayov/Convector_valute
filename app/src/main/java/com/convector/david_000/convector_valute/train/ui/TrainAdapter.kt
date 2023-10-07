@@ -37,6 +37,12 @@ class TrainAdapter(
                 binding.timeStartText.text = item.fromTime
                 binding.timeEndText.text = item.toTime
                 binding.timeSpendText.text = item.timeInWay
+                val string = StringBuilder()
+                item.list.forEach {
+                    string.append(it.freeSeats)
+                    string.append("\n")
+                }
+                binding.freeSeatsText.text = string
             }
         }
     }

@@ -59,6 +59,21 @@
         app:layout_constraintTop_toBottomOf="@id/city_start_text"
         tools:text="13123" />
 
+
+    <TextView
+        android:id="@+id/free_seats_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:paddingBottom="10dp"
+        android:textColor="#2C2D37"
+        android:textSize="12sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/time_spend_text"
+        tools:text="13123" />
+
+
     <TextView
         android:id="@+id/city_end_text"
         android:layout_width="match_parent"

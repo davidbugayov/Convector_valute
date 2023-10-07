@@ -4,12 +4,12 @@ data class TrainItem (
     val stationNameFrom: String,
     val station0: String,
     val stationTo: String,
-    val date0: String,
+    val dateStart: String,
     val fromTime: String,
     val codeFrom: Long,
     val codeTo: Long,
     val toTime: String,
     val timeInWay: String,
     val trainNum: String,
-    val list: List<CarsItem>
+    val list: List<CarsItem>,
 )
